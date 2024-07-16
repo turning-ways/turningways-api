@@ -5,6 +5,7 @@ const { validateToken } = require("../middlewares/validateToken");
 const rightsCheck = require("../middlewares/churchAdminRights");
 
 const { churchProfileStorage } = require("../utils/storage");
+const { cacheMiddleware } = require("../middlewares/redis");
 
 const upload = multer({ storage: churchProfileStorage });
 const router = express.Router();
@@ -39,6 +40,12 @@ router.get(
   "/:churchId/members",
   validateToken,
   rightsCheck,
+  cacheMiddleware({
+    options: {
+      EX: 43200, // 12 hours
+      NX: false,
+    },
+  }),
   churchController.getMembers,
 );
 
