@@ -39,6 +39,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "prom-client": "^15.1.2",
+    "redis": "^4.6.15",
     "request": "^2.88.2",
     "winston": "^3.13.0",
     "xss-clean": "^0.1.4"

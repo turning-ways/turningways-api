@@ -210,23 +210,23 @@ class MemberService {
     }
   }
 
-  // static async findMemberByUserId(userId) {
-  //   try {
-  //     const member = await Member.findOne({
-  //       userId,
-  //       contactType: "member",
-  //       isDeleted: false,
-  //     }).select("-__v -isDeleted ");
-  //     if (!member || member.isDeleted) {
-  //       throw new AppError("Member not found", 404);
-  //     }
-  //     logger.info(`Member found with User ID: ${userId}`);
-  //     return member;
-  //   } catch (error) {
-  //     logger.error(`Error finding member by User ID: ${error.message}`);
-  //     throw error;
-  //   }
-  // }
+  static async findMemberByUserId(userId) {
+    try {
+      const member = await Member.findOne({
+        userId,
+        contactType: "member",
+        isDeleted: false,
+      }).select("-__v -isDeleted ");
+      if (!member || member.isDeleted) {
+        throw new AppError("Member not found", 404);
+      }
+      logger.info(`Member found with User ID: ${userId}`);
+      return member;
+    } catch (error) {
+      logger.error(`Error finding member by User ID: ${error.message}`);
+      throw error;
+    }
+  }
 
   static async findMembersByChurchId(churchId, page = 1, limit = 10) {
     try {
