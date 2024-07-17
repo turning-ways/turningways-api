@@ -18,6 +18,7 @@ const authRoutes = require("./routes/authRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const churchRoutes = require("./routes/churchRoutes");
 const memberRoutes = require("./routes/memberRoutes");
+const bodyFilter = require("./middlewares/filter");
 
 process.on("uncaughtException", (err) => {
   console.log(err.name, err.message);
@@ -48,7 +49,7 @@ async function startServer() {
       // return msg;
     }),
   );
-
+  app.use(bodyFilter);
   await initializeRedisClient();
 
   const limiter = rateLimit({
