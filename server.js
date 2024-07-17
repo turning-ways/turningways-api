@@ -78,6 +78,9 @@ app.use(express.json()); // Body parser, reading data from body into req.bodyapp
 
   // ------------- Routes -------------
   // ------------- v1 -------------
+  app.get("/", (req,res) => {
+    res.send("hello");
+  });
   app.use("/api/v1", authRoutes); // User routes
   app.use("/api/v1/churches", churchRoutes); // Church routes
   app.use("/api/v1/members", memberRoutes); // Member routes
