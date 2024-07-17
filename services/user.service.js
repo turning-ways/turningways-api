@@ -50,7 +50,7 @@ class UserService {
 
   static async checkVerificationStatus(email, phone, user) {
     if (email && !user.emailConfirmed) {
-      throw new AppError("Please verify your email", 400);
+      throw new AppError(`Please verify your email ${email}`, 400);
     }
     if (phone && !user.isPhoneVerified) {
       throw new AppError("Please verify your phone number", 400);
