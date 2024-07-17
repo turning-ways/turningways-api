@@ -26,6 +26,13 @@ const cookieSender = (
       status: "success",
       redirect: redirectLink,
       accessToken: accessToken,
+      user: {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        mainChurch: user.mainChurch,
+      },
     });
 };
 
@@ -37,7 +44,7 @@ function handleLogin(accessToken, refreshToken, user, res) {
     // Determine the redirect link based on whether the admin has a main church
     const redirectLink = mainChurch ? "admin dashboard" : "church selection";
     const disabled = false;
-    cookieSender(res, redirectLink, refreshToken, accessToken, disabled);
+    cookieSender(res, redirectLink, refreshToken, accessToken, disabled, user);
   } else {
     // Send a not an admin response error
     return res.status(401).json({
