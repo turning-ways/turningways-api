@@ -4,6 +4,7 @@ const cookieSender = (
   refreshToken,
   accessToken,
   disabled,
+  user,
 ) => {
   const CookieOptions = {
     httpOnly: true,
