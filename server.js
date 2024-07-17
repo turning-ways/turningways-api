@@ -27,7 +27,7 @@ process.on("uncaughtException", (err) => {
 });
 async function startServer() {
   const app = express();
-app.use(express.json()); // Body parser, reading data from body into req.bodyapp.use(express.json()); // Body parser, reading data from body into req.body
+  app.use(express.json()); // Body parser, reading data from body into req.bodyapp.use(express.json()); // Body parser, reading data from body into req.body
   // Database connection AND PORT
   const PORT = process.env.PORT || 3001;
 
@@ -56,7 +56,19 @@ app.use(express.json()); // Body parser, reading data from body into req.bodyapp
     max: 100, // limit each IP to 100 requests per windowMs
   });
   // -------------- Middlewares --------------
-  app.use(cors()); // Enable All CORS Requests
+  app.use(
+    cors({
+      origin: [
+        "http://localhost:4000",
+        "http://localhost:5173",
+        "https://digital-church.onrender.com",
+        "https://digital-church-web.vercel.app",
+        "https://www.turningways.com",
+        "https://turningways.com",
+      ],
+      credentials: true,
+    }),
+  ); // Enable All CORS Requests
   app.use(helmet()); // Secure HTTP headers
   app.use(limiter); // Limit requests from an IP
   app.use(
@@ -69,7 +81,7 @@ app.use(express.json()); // Body parser, reading data from body into req.bodyapp
       }, // Secure cookie
     }),
   ); // Session middleware
-  
+
   app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
   app.use(cookieParser()); // Parse Cookie header and populate req.cookies with an object keyed by the cookie names
 
@@ -78,7 +90,7 @@ app.use(express.json()); // Body parser, reading data from body into req.bodyapp
 
   // ------------- Routes -------------
   // ------------- v1 -------------
-  app.get("/", (req,res) => {
+  app.get("/", (req, res) => {
     res.send("hello");
   });
   app.use("/api/v1", authRoutes); // User routes
