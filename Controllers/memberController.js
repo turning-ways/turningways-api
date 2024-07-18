@@ -172,8 +172,8 @@ exports.getMe = catchAsync(async (req, res, next) => {
         firstName: member.profile.firstName,
         lastName: member.profile.lastName,
         role: member.orgRole.name,
-        church: member.church.name,
-        churchId: member.church._id,
+        church: member.churchId.name,
+        churchId: member.churchId._id,
       },
     },
   });
