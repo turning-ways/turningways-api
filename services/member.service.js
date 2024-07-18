@@ -551,7 +551,7 @@ class MemberService {
         throw new AppError("Member not found", 404);
       }
       logger.info(`Member found with User ID: ${userId}`);
-      return member.profile;
+      return member;
     } catch (error) {
       logger.error(`Error finding member by User ID: ${error.message}`);
       throw error;
