@@ -166,6 +166,13 @@ exports.getMe = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "Member found",
-    data: member,
+    data: {
+      member: {
+        memberId: member._id,
+        firstName: member.profile.firstName,
+        lastName: member.profile.lastName,
+        role: member.orgRole.name,
+      },
+    },
   });
 });
