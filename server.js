@@ -71,7 +71,7 @@ async function startServer() {
     }),
   ); // Enable All CORS Requests
   app.use(helmet()); // Secure HTTP headers
-  app.use(limiter); // Limit requests from an IP
+  // app.use(limiter); // Limit requests from an IP
   app.use(
     session({
       secret: process.env.JWT_SECRET, // A secret key to sign the session ID cookie
