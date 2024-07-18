@@ -21,6 +21,8 @@ router.post(
   memberController.addMember,
 );
 
+router.get("/", validateToken.validateToken, memberController.getMe);
+
 // Routes for member management
 router
   .route("/:id")

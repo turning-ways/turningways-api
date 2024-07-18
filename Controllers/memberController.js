@@ -160,12 +160,12 @@ exports.deleteMemberNoteById = catchAsync(async (req, res, next) => {
   });
 });
 
-// exports.getMe = catchAsync(async (req, res, next) => {
-//   const userId = req.user.id;
-//   const member = await MemberService.getMe(userId);
-//   res.status(200).json({
-//     status: "success",
-//     message: "Member found",
-//     data: member,
-//   });
-// });
+exports.getMe = catchAsync(async (req, res, next) => {
+  const userId = req.user.id;
+  const member = await MemberService.getMe(userId);
+  res.status(200).json({
+    status: "success",
+    message: "Member found",
+    data: member,
+  });
+});
