@@ -24,13 +24,11 @@ exports.validateToken = async (req, res, next) => {
     req.user = decoded;
 
     // Optional: Check if user is still in the database
+
     const Member = await MemberService.getMemberRole(decoded.id);
-    if (!Member) {
-      return next(new AppError("User not found", 404));
+    if (Member) {
+      req.role = Member.name;
     }
-
-    req.role = Member.name;
-
     // 5. Proceed to next middleware:
     next();
   } catch (error) {
