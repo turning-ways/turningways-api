@@ -545,7 +545,7 @@ class MemberService {
       const member = await Member.findOne({
         userId,
         contactType: "member",
-      }).populate("orgRole", "name");
+      }).populate("orgRole churchId", "name");
 
       if (!member) {
         throw new AppError("Member not found", 404);

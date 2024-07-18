@@ -439,8 +439,13 @@ class ChurchService {
     if (!members) {
       throw new AppError("Members not found", 404);
     }
-
-    return members;
+    const membersArray = members.map((member) => ({
+      fullName: `${member.profile.firstName} ${member.profile.lastName}`,
+      email: member.profile.email,
+      phone: member.profile.phone.mainPhone,
+      dateOfBirth: member.profile.dateOfBirth,
+    }));
+    return membersArray;
   }
 
   static async uploadChurchLogo(churchId, req) {
