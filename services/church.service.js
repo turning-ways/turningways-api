@@ -440,6 +440,8 @@ class ChurchService {
       throw new AppError("Members not found", 404);
     }
     const membersArray = members.map((member) => ({
+      _id: member._id,
+      photo: member.profile.photo,
       fullName: `${member.profile.firstName} ${member.profile.lastName}`,
       email: member.profile.email,
       gender: member.profile.gender,
