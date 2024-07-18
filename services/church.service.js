@@ -442,6 +442,7 @@ class ChurchService {
     const membersArray = members.map((member) => ({
       fullName: `${member.profile.firstName} ${member.profile.lastName}`,
       email: member.profile.email,
+      gender: member.profile.gender,
       phone: member.profile.phone.mainPhone,
       dateOfBirth: member.profile.dateOfBirth,
     }));
