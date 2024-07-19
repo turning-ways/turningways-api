@@ -352,7 +352,7 @@ class ChurchService {
         createdAt: { $gte: dateRange.start, $lte: dateRange.end },
         contactType: "member",
       }).select(
-        "profile.firstName profile.lastName _id profile.email profile.phone.mainPhone profile.dateOfBirth profile.gender profile.maritalStatus",
+        "profile.firstName profile.lastName _id profile.email profile.phone.mainPhone profile.dateOfBirth profile.gender profile.maritalStatus createdAt",
       );
 
       // Process and return results (remaining code unchanged)
@@ -363,6 +363,7 @@ class ChurchService {
         email: member.profile.email,
         phone: member.profile.phone.mainPhone,
         dateOfBirth: member.profile.dateOfBirth,
+        maritalStatus: member.profile.maritalStatus,
         age: member.age,
         dateJoined: member.createdAt,
       }));
@@ -450,11 +451,14 @@ class ChurchService {
     const membersArray = members.map((member) => ({
       _id: member._id,
       photo: member.profile.photo,
+      firstName: member.profile.firstName,
+      lastName: member.profile.lastName,
       fullName: `${member.profile.firstName} ${member.profile.lastName}`,
       email: member.profile.email,
       gender: member.profile.gender,
       phone: member.profile.phone.mainPhone,
       dateOfBirth: member.profile.dateOfBirth,
+      dateJoined: member.createdAt,
     }));
     return membersArray;
   }
