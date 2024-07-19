@@ -355,23 +355,37 @@ class ChurchService {
       );
 
       // Process and return results (remaining code unchanged)
-      const members = membersJoined.map((member) => {
-        if (member.contactType === "member") {
-          return {
-            id: member._id,
-            firstName: member.profile.firstName,
-            lastName: member.profile.lastName,
-            gender: member.profile.gender,
-            email: member.profile.email,
-            phone: member.profile.phone.mainPhone,
-            dateOfBirth: member.profile.dateOfBirth,
-            maritalStatus: member.profile.maritalStatus,
-            anniversaries: member.profile.anniversaries,
-            age: member.age,
-            dateJoined: member.createdAt,
-          };
-        }
-      });
+      const members = membersJoined
+        .filter((member) => member.contactType === "member")
+        .map(
+          ({
+            _id: id,
+            profile: {
+              firstName,
+              lastName,
+              gender,
+              email,
+              phone: { mainPhone: phone },
+              dateOfBirth,
+              maritalStatus,
+              anniversaries,
+            },
+            age,
+            createdAt: dateJoined,
+          }) => ({
+            id,
+            firstName,
+            lastName,
+            gender,
+            email,
+            phone,
+            dateOfBirth,
+            maritalStatus,
+            anniversaries,
+            age,
+            dateJoined,
+          }),
+        );
 
       // unverified members and verified members, contactType === members
       const unverifiedMembers = membersJoined.filter(
