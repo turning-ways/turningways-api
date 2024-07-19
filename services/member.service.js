@@ -423,30 +423,26 @@ class MemberService {
       const member = await Member.findOne({
         _id: id,
         contactType: "member",
-      });
+      }).populate("notes.member", "profile.firstName profile.lastName");
       if (!member) {
         throw new AppError("Member not updated", 400);
       }
 
       await member.addNote({
-        comment: data.comment,
+        comment: data.note,
         date: Date.now(),
         type: "general",
-        member: data.member,
+        member: data.createdBy,
       });
 
-      member.populate("notes.member", "profile.firstName profile.lastName");
+      member.populate("notes.member", "profile.firstName profile.lastName _id");
 
       const notes = member.notes.map((note) => ({
         id: note._id,
         comment: note.comment,
         date: note.date,
         type: note.type,
-        createdBy: {
-          id: note.member._id,
-          name: `${note.member.profile.firstName} ${note.member.profile.lastName}`,
-          role: note.member.orgRole.name,
-        },
+        createdBy: note.member,
       }));
 
       await session.commitTransaction();
