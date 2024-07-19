@@ -351,7 +351,7 @@ class ChurchService {
         churchId,
         createdAt: { $gte: dateRange.start, $lte: dateRange.end },
       }).select(
-        "profile.firstName profile.lastName _id profile.email profile.phone.mainPhone profile.dateOfBirth profile.gender profile.maritalStatus createdAt contactType profile.photo profile.anniversaries", ,
+        "profile.firstName profile.lastName _id profile.email profile.phone.mainPhone profile.dateOfBirth profile.gender profile.maritalStatus createdAt contactType profile.photo profile.anniversaries verification profile.active",
       );
 
       // Process and return results (remaining code unchanged)
@@ -372,6 +372,23 @@ class ChurchService {
           };
         }
       });
+
+      // unverified members and verified members, contactType === members
+      const unverifiedMembers = membersJoined.filter(
+        (member) =>
+          member.contactType === "member" &&
+          member.verification === "unverified",
+      ).length;
+
+      const verifiedMembers = membersJoined.filter(
+        (member) =>
+          member.contactType === "member" && member.verification === "verified",
+      ).length;
+
+      const ActiveMembers = membersJoined.filter(
+        (member) =>
+          member.contactType === "member" && member.profile.active === true,
+      ).length;
 
       const contactCount = membersJoined.filter(
         (member) => member.contactType === "contact",
@@ -434,6 +451,9 @@ class ChurchService {
           male: maleCount,
           female: femaleCount,
         },
+        verifiedCount: verifiedMembers,
+        unverifiedCount: unverifiedMembers,
+        activeMembers: ActiveMembers,
         noOfContacts: contactCount,
         ageGroup,
         members,
