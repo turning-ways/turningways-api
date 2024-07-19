@@ -31,8 +31,16 @@ router
     checkAdminChurch,
     memberController.getMember,
   )
-  .patch(validateToken.validateToken, memberController.updateMember)
-  .delete(validateToken.validateToken, memberController.deleteMember);
+  .patch(
+    validateToken.validateToken,
+    checkAdminChurch,
+    memberController.updateMember,
+  )
+  .delete(
+    validateToken.validateToken,
+    checkAdminChurch,
+    memberController.deleteMember,
+  );
 
 router.post(
   "/:id/profile-picture",
@@ -45,18 +53,35 @@ router.post(
 router.patch(
   "/:churchId/member/:memberId/verify",
   validateToken.validateToken,
+  checkAdminChurch,
   memberController.updateVerificationStatus,
 );
 
 // Routes for notes management
 router
-  .route("/:id/note")
-  .post(validateToken.validateToken, memberController.addNoteToMember)
-  .get(validateToken.validateToken, memberController.getMemberNotes);
+  .route("/:churchId/member/:id/note")
+  .post(
+    validateToken.validateToken,
+    checkAdminChurch,
+    memberController.addNoteToMember,
+  )
+  .get(
+    validateToken.validateToken,
+    checkAdminChurch,
+    memberController.getMemberNotes,
+  );
 
 router
-  .route("/:id/note/:noteId")
-  .patch(validateToken.validateToken, memberController.updateNote)
-  .delete(validateToken.validateToken, memberController.deleteMemberNoteById);
+  .route("/:churchId/member/:id/note/:noteId")
+  .patch(
+    validateToken.validateToken,
+    checkAdminChurch,
+    memberController.updateNote,
+  )
+  .delete(
+    validateToken.validateToken,
+    checkAdminChurch,
+    memberController.deleteMemberNoteById,
+  );
 
 module.exports = router;
