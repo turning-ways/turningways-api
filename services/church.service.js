@@ -378,31 +378,38 @@ class ChurchService {
       const ageGroup = membersJoined.reduce(
         (acc, member) => {
           const { age } = member;
-          if (age <= 18) {
-            acc["0-18"] += 1;
-          } else if (age <= 30) {
-            acc["19-30"] += 1;
-          } else if (age <= 40) {
+          if (age <= 10) {
+            acc["0-10"] += 1;
+          }
+          if (age > 10 && age <= 20) {
+            acc["11-20"] += 1;
+          }
+          if (age > 20 && age <= 30) {
+            acc["21-30"] += 1;
+          }
+          if (age > 30 && age <= 40) {
             acc["31-40"] += 1;
-          } else if (age <= 50) {
+          }
+          if (age > 40 && age <= 50) {
             acc["41-50"] += 1;
-          } else if (age <= 60) {
+          }
+          if (age > 50 && age <= 60) {
             acc["51-60"] += 1;
-          } else if (age <= 70) {
+          }
+          if (age > 60) {
             acc["61-70"] += 1;
-          } else {
-            acc["71+"] += 1;
           }
           return acc;
         },
+        // Initial value of the accumulator
         {
-          "0-18": 0,
-          "19-30": 0,
+          "0-10": 0,
+          "11-20": 0,
+          "21-30": 0,
           "31-40": 0,
           "41-50": 0,
           "51-60": 0,
           "61-70": 0,
-          "71+": 0,
         },
       );
 
