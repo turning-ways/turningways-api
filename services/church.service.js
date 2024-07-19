@@ -364,6 +364,7 @@ class ChurchService {
         phone: member.profile.phone.mainPhone,
         dateOfBirth: member.profile.dateOfBirth,
         age: member.age,
+        dateJoined: member.createdAt,
       }));
       let maleCount = 0;
       let femaleCount = 0;
