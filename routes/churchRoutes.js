@@ -40,12 +40,12 @@ router.get(
   "/:churchId/members",
   validateToken,
   rightsCheck,
-  cacheMiddleware({
-    options: {
-      EX: 43200, // 12 hours
-      NX: false,
-    },
-  }),
+  // cacheMiddleware({
+  //   options: {
+  //     EX: 43200, // 12 hours
+  //     NX: false,
+  //   },
+  // }),
   churchController.getMembers,
 );
 
