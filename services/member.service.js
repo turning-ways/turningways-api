@@ -435,7 +435,7 @@ class MemberService {
             notes: {
               comment: data.note,
               date: Date.now(),
-              type: data.type,
+              type: "general",
               member: data.createdBy,
             },
           },
