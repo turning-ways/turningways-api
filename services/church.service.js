@@ -410,15 +410,15 @@ class ChurchService {
 
       let maleCount = 0;
       let femaleCount = 0;
-      membersJoined.forEach((member) => {
-        if (member.profile.gender === "male") {
+      members.forEach((member) => {
+        if (member.gender === "male") {
           maleCount += 1;
-        } else if (member.profile.gender === "female") {
+        } else if (member.gender === "female") {
           femaleCount += 1;
         }
       });
 
-      const ageGroup = membersJoined.reduce(
+      const ageGroup = members.reduce(
         (acc, member) => {
           const { age } = member;
           if (age <= 10) {
@@ -460,7 +460,7 @@ class ChurchService {
         `Members joined ${dateParam} for church with ID: ${churchId}`,
       );
       return {
-        length: membersJoined.length,
+        length: members.length,
         genderCount: {
           male: maleCount,
           female: femaleCount,
