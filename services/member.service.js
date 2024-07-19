@@ -443,7 +443,7 @@ class MemberService {
         { session, new: true },
       ).populate("notes.member", "profile.firstName profile.lastName");
 
-      const notes = Member.notes.map((note) => ({
+      const notes = member.notes.map((note) => ({
         id: note._id,
         comment: note.comment,
         date: note.date,
