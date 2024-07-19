@@ -350,24 +350,33 @@ class ChurchService {
       const membersJoined = await Contact.find({
         churchId,
         createdAt: { $gte: dateRange.start, $lte: dateRange.end },
-        contactType: "member",
       }).select(
-        "profile.firstName profile.lastName _id profile.email profile.phone.mainPhone profile.dateOfBirth profile.gender profile.maritalStatus createdAt",
+        "profile.firstName profile.lastName _id profile.email profile.phone.mainPhone profile.dateOfBirth profile.gender profile.maritalStatus createdAt contactType profile.photo profile.anniversaries", ,
       );
 
       // Process and return results (remaining code unchanged)
-      const members = membersJoined.map((member) => ({
-        id: member._id,
-        firstName: member.profile.firstName,
-        lastName: member.profile.lastName,
-        gender: member.profile.gender,
-        email: member.profile.email,
-        phone: member.profile.phone.mainPhone,
-        dateOfBirth: member.profile.dateOfBirth,
-        maritalStatus: member.profile.maritalStatus,
-        age: member.age,
-        dateJoined: member.createdAt,
-      }));
+      const members = membersJoined.map((member) => {
+        if (member.contactType === "member") {
+          return {
+            id: member._id,
+            firstName: member.profile.firstName,
+            lastName: member.profile.lastName,
+            gender: member.profile.gender,
+            email: member.profile.email,
+            phone: member.profile.phone.mainPhone,
+            dateOfBirth: member.profile.dateOfBirth,
+            maritalStatus: member.profile.maritalStatus,
+            anniversaries: member.profile.anniversaries,
+            age: member.age,
+            dateJoined: member.createdAt,
+          };
+        }
+      });
+
+      const contactCount = membersJoined.filter(
+        (member) => member.contactType === "contact",
+      ).length;
+
       let maleCount = 0;
       let femaleCount = 0;
       membersJoined.forEach((member) => {
@@ -425,6 +434,7 @@ class ChurchService {
           male: maleCount,
           female: femaleCount,
         },
+        noOfContacts: contactCount,
         ageGroup,
         members,
       };
