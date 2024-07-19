@@ -360,6 +360,7 @@ class ChurchService {
         id: member._id,
         firstName: member.profile.firstName,
         lastName: member.profile.lastName,
+        gender: member.profile.gender,
         email: member.profile.email,
         phone: member.profile.phone.mainPhone,
         dateOfBirth: member.profile.dateOfBirth,
