@@ -428,7 +428,7 @@ class MemberService {
         throw new AppError("Member not updated", 400);
       }
 
-      await Member.updateOne(
+      const Upmember = await Member.updateOne(
         { _id: id },
         {
           $push: {
@@ -439,11 +439,24 @@ class MemberService {
             },
           },
         },
-        { session },
+        { session, new: true },
       ).populate("notes.member", "profile.firstName profile.lastName");
+
+      const notes = Upmember.notes.map((note) => ({
+        id: note._id,
+        comment: note.comment,
+        date: note.date,
+        type: note.type,
+        createdBy: {
+          id: note.member._id,
+          name: `${note.member.profile.firstName} ${note.member.profile.lastName}`,
+          role: note.member.orgRole.name,
+        },
+      }));
+
       await session.commitTransaction();
       logger.info(`Member updated with ID: ${id}`);
-      return member.notes;
+      return notes;
     } catch (error) {
       await session.abortTransaction();
       logger.error(`Error updating member: ${error.message}`);
@@ -463,6 +476,7 @@ class MemberService {
       const notes = member.notes.map((note) => ({
         id: note._id,
         comment: note.comment,
+        date: note.date,
         type: note.type,
         createdBy: {
           id: note.member._id,
@@ -496,10 +510,23 @@ class MemberService {
       }
 
       member.updateNote(noteId, data);
+      member.populate("notes.member", "profile.firstName profile.lastName");
+
+      const notes = member.notes.map((note) => ({
+        id: note._id,
+        comment: note.comment,
+        date: note.date,
+        type: note.type,
+        createdBy: {
+          id: note.member._id,
+          name: `${note.member.profile.firstName} ${note.member.profile.lastName}`,
+          role: note.member.orgRole.name,
+        },
+      }));
 
       await session.commitTransaction();
       logger.info(`Member updated with ID: ${id}`);
-      return member;
+      return notes;
     } catch (error) {
       await session.abortTransaction();
       logger.error(`Error updating member: ${error.message}`);

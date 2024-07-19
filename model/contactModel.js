@@ -346,6 +346,7 @@ contactSchema.methods.updateNote = function (noteId, data) {
   if (!note) {
     return new AppError("Note not found", 404);
   }
+  note.date = Date.now();
   note.type = data.type;
   note.comment = data.note;
   return this.save();

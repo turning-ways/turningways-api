@@ -107,13 +107,13 @@ exports.updateVerificationStatus = catchAsync(async (req, res, next) => {
 exports.addNoteToMember = catchAsync(async (req, res, next) => {
   const memberId = req.params.id;
   const data = req.body;
-  const member = await MemberService.addNoteToMember(memberId, data);
+  const notes = await MemberService.addNoteToMember(memberId, data);
   res.status(200).json({
     status: "success",
     message: "Note added to member successfully",
     data: {
-      memberId: member._id,
-      notes: member,
+      memberId: memberId,
+      notes: notes,
     },
   });
 });
@@ -135,13 +135,13 @@ exports.updateNote = catchAsync(async (req, res, next) => {
   const memberId = req.params.id;
   const { noteId } = req.params;
   const data = req.body;
-  const member = await MemberService.updateNoteById(memberId, noteId, data);
+  const notes = await MemberService.updateNoteById(memberId, noteId, data);
   res.status(200).json({
     status: "success",
     message: "Member note updated successfully",
     data: {
-      memberId: member._id,
-      notes: member.notes,
+      memberId: memberId,
+      notes: notes,
     },
   });
 });
