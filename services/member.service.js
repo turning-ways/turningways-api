@@ -464,20 +464,34 @@ class MemberService {
         contactType: "member",
       }).populate("notes.member", "profile.firstName profile.lastName");
 
-      const notes = member.notes.map((note) => ({
-        id: note._id,
-        comment: note.comment,
-        date: note.date,
-        type: note.type,
-        createdBy: {
-          id: note.member._id,
-          name: `${note.member.profile.firstName} ${note.member.profile.lastName}`,
-          role: note.member.orgRole.name,
-        },
-      }));
       if (!member) {
         throw new AppError("Member not found", 404);
       }
+
+      // Log the member and notes to debug
+      console.log("Member:", member);
+      console.log("Notes:", member.notes);
+
+      const notes = member.notes
+        .map((note) => {
+          if (!note.member) {
+            console.log("Note member is undefined for note:", note);
+            return null; // or handle this case as needed
+          }
+          return {
+            id: note._id,
+            comment: note.comment,
+            date: note.date,
+            type: note.type,
+            createdBy: {
+              id: note.member._id,
+              name: `${note.member.profile.firstName} ${note.member.profile.lastName}`,
+              role: note.member.orgRole.name,
+            },
+          };
+        })
+        .filter((note) => note !== null); // Remove any null notes from the array
+
       logger.info(`Member found with ID: ${id}`);
       return notes;
     } catch (error) {
