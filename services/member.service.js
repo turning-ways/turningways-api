@@ -428,7 +428,7 @@ class MemberService {
         throw new AppError("Member not updated", 400);
       }
 
-      const Upmember = await Member.updateOne(
+      await Member.updateOne(
         { _id: id },
         {
           $push: {
@@ -443,7 +443,7 @@ class MemberService {
         { session, new: true },
       ).populate("notes.member", "profile.firstName profile.lastName");
 
-      const notes = Upmember.notes.map((note) => ({
+      const notes = Member.notes.map((note) => ({
         id: note._id,
         comment: note.comment,
         date: note.date,
