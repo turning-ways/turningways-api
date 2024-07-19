@@ -341,6 +341,11 @@ contactSchema.virtual("age").get(function () {
   return currentYear - dobYear;
 });
 
+contactSchema.methods.addNote = function (data) {
+  this.notes.push(data);
+  return this.save();
+};
+
 contactSchema.methods.updateNote = function (noteId, data) {
   const note = this.notes.id(noteId);
   if (!note) {

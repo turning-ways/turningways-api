@@ -428,20 +428,14 @@ class MemberService {
         throw new AppError("Member not updated", 400);
       }
 
-      await Member.updateOne(
-        { _id: id },
-        {
-          $push: {
-            notes: {
-              comment: data.note,
-              date: Date.now(),
-              type: "general",
-              member: data.createdBy,
-            },
-          },
-        },
-        { session, new: true },
-      ).populate("notes.member", "profile.firstName profile.lastName");
+      await member.addNote({
+        comment: data.comment,
+        date: Date.now(),
+        type: "general",
+        member: data.member,
+      });
+
+      member.populate("notes.member", "profile.firstName profile.lastName");
 
       const notes = member.notes.map((note) => ({
         id: note._id,
