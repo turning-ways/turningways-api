@@ -434,6 +434,7 @@ class MemberService {
           $push: {
             notes: {
               comment: data.note,
+              date: Date.now(),
               type: data.type,
               member: data.createdBy,
             },
