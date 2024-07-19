@@ -485,8 +485,9 @@ class ChurchService {
       contactType: "member",
     })
       .select(
-        "profile.firstName profile.lastName profile.email profile.phone profile.gender profile.dateOfBirth profile.photo",
+        "profile.firstName profile.lastName profile.email profile.phone profile.gender profile.dateOfBirth profile.photo createdBy",
       )
+      .populate("createdBy", "profile.firstName")
       .skip(skip)
       .limit(limit);
 

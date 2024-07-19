@@ -198,7 +198,8 @@ class MemberService {
         contactType: "member",
       })
         .select("-__v -isDeleted -assignedTo -action -labels -howDidYouHear")
-        .populate("orgRole", "name");
+        .populate("orgRole", "name")
+        .populate("createdBy", "profile.firstName profile.lastName");
       if (!member || member.isDeleted) {
         throw new AppError("Member not found", 404);
       }
