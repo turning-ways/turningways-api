@@ -15,7 +15,7 @@ router.post(
 );
 
 router.post(
-  "/",
+  "/:churchId/",
   validateToken.validateToken,
   checkAdminChurch,
   memberController.addMember,
@@ -25,7 +25,7 @@ router.get("/me", validateToken.validateToken, memberController.getMe);
 
 // Routes for member management
 router
-  .route("/:id")
+  .route("/:churchId/member/:id")
   .get(
     validateToken.validateToken,
     checkAdminChurch,
@@ -43,7 +43,7 @@ router.post(
 
 // Route to verify a member
 router.patch(
-  "/:memberId/verify",
+  "/:churchId/member/:memberId/verify",
   validateToken.validateToken,
   memberController.updateVerificationStatus,
 );
