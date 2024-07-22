@@ -122,7 +122,7 @@ const contactSchema = new mongoose.Schema(
       worker: {
         type: String,
         toLowerCase: true,
-        default: "Non-Worker",
+        default: "Member",
       },
       serviceUnit: {
         type: String,
