@@ -153,6 +153,10 @@ const contactSchema = new mongoose.Schema(
         toLowerCase: true,
         default: "Non-Worker",
       },
+      serviceUnit: {
+        type: String,
+        trim: true,
+      },
       active: {
         type: Boolean,
         default: true,
