@@ -382,7 +382,7 @@ class MemberService {
       }
 
       member.profile.photo = req.file.path;
-      await member.save({ session });
+      await member.save({ session, validateBeforeSave: false });
       await session.commitTransaction();
       logger.info(`Member updated with ID: ${id}`);
       return member;

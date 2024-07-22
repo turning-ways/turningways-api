@@ -26,6 +26,10 @@ const contactSchema = new mongoose.Schema(
         trim: true,
         required: [true, "First name is required"],
       },
+      middleName: {
+        type: String,
+        trim: true,
+      },
       lastName: {
         type: String,
         trim: true,
@@ -352,7 +356,7 @@ contactSchema.methods.updateNote = function (noteId, data) {
     return new AppError("Note not found", 404);
   }
   note.date = Date.now();
-  note.type = data.type;
+  note.type = "general";
   note.comment = data.note;
   return this.save();
 };
