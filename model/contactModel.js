@@ -138,7 +138,7 @@ const contactSchema = new mongoose.Schema(
           "undefined",
           "primary",
           "secondary",
-          "tertiary",
+          "graduate",
           "post-graduate",
         ],
         default: "undefined",
