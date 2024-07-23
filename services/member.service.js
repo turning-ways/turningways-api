@@ -132,7 +132,6 @@ class MemberService {
               gender: data.gender,
               dateOfBirth: data.dateOfBirth,
               maritalStatus: data.maritalStatus,
-              anniversaries: data.anniversaries,
               address: {
                 homeAddress: data.homeAddress,
                 workAddress: data.workAddress,
@@ -147,6 +146,7 @@ class MemberService {
               worker: data.worker,
               active: data.active,
               educationalLevel: data.educationalLevel,
+              employmentStatus: data.employmentStatus,
               healthStatus: data.healthStatus,
               healthConditionRemarks: data.healthConditionRemarks,
             },
@@ -284,8 +284,6 @@ class MemberService {
         updateFields["profile.dateOfBirth"] = data.dateOfBirth;
       if (data.maritalStatus)
         updateFields["profile.maritalStatus"] = data.maritalStatus;
-      if (data.anniversaries)
-        updateFields["profile.anniversaries"] = data.anniversaries;
 
       // Address fields
       if (data.homeAddress)
@@ -309,6 +307,8 @@ class MemberService {
       if (data.active) updateFields["profile.active"] = data.active;
       if (data.educationalLevel)
         updateFields["profile.educationalLevel"] = data.educationalLevel;
+      if (data.employmentStatus)
+        updateFields["profile.employmentStatus"] = data.employmentStatus;
       if (data.healthStatus)
         updateFields["profile.healthStatus"] = data.healthStatus;
       if (data.healthConditionRemarks)
