@@ -299,6 +299,36 @@ class ContactService {
     }
   }
 
+  static async deleteActionItem(contactId, actionId, churchId) {
+    const contact = await Contact.findOne({
+      _id: contactId,
+      churchId,
+      contactType: "contact",
+    });
+    if (!contact) {
+      throw new AppError("Contact not found", 404);
+    }
+
+    const action = contact.action.id(actionId);
+    if (!action) {
+      throw new AppError("Action item not found", 404);
+    }
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      contact.action = contact.action.filter(
+        (act) => act._id.toString() !== actionId,
+      );
+      await contact.save({ session });
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw new AppError(error, 500);
+    } finally {
+      session.endSession();
+    }
+  }
+
   // Labels
   static async addLabel(contactId, data, churchId) {
     const contact = await Contact.findOne({

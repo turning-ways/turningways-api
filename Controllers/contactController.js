@@ -239,6 +239,7 @@ exports.addLabel = catchAsync(async (req, res, next) => {
     status: "success",
     message: "Label added successfully",
     data: {
+      id: contact._id,
       labels: contact.labels,
     },
   });
@@ -293,6 +294,22 @@ exports.updateAction = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "Action updated successfully",
+    data: {
+      action: contact.action,
+    },
+  });
+});
+
+exports.deleteAction = catchAsync(async (req, res, next) => {
+  const { contactId, actionId, churchId } = req.params;
+  const contact = await ContactService.deleteActionItem(
+    contactId,
+    actionId,
+    churchId,
+  );
+  res.status(204).json({
+    status: "success",
+    message: "Action deleted successfully",
     data: {
       action: contact.action,
     },
