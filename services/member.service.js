@@ -369,6 +369,46 @@ class MemberService {
     }
   }
 
+  static async restoreMember(id) {
+    try {
+      const member = await Member.findOneAndUpdate(
+        {
+          _id: id,
+          contactType: "member",
+        },
+        { isDeleted: false },
+        {
+          new: true,
+        },
+      );
+      if (!member) {
+        throw new AppError("Member not restored", 400);
+      }
+      logger.info(`Member restored with ID: ${id}`);
+      return member;
+    } catch (error) {
+      logger.error(`Error restoring member: ${error.message}`);
+      throw error;
+    }
+  }
+
+  static async batchDeleteMembersPermanent(ids) {
+    try {
+      const members = await Member.deleteMany({
+        _id: { $in: ids },
+        contactType: "member",
+      });
+      if (!members) {
+        throw new AppError("Members not deleted", 400);
+      }
+      logger.info(`Members permanently deleted with IDs: ${ids}`);
+      return members;
+    } catch (error) {
+      logger.error(`Error deleting members: ${error.message}`);
+      throw error;
+    }
+  }
+
   static async uploadProfilePicture(id, req) {
     const session = await mongoose.startSession();
     session.startTransaction();

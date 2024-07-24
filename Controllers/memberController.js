@@ -93,6 +93,16 @@ exports.deleteMember = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.batchDeleteMembers = catchAsync(async (req, res, next) => {
+  const data = req.body;
+  await MemberService.batchDeleteMembersPermanent(data.ids);
+  res.status(204).json({
+    status: "success",
+    message: "Members deleted successfully",
+    data: null,
+  });
+});
+
 exports.updateVerificationStatus = catchAsync(async (req, res, next) => {
   const { memberId } = req.params;
   const data = req.body;

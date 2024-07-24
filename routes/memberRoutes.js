@@ -42,6 +42,13 @@ router
     memberController.deleteMember,
   );
 
+router.delete(
+  "/:churchId/members",
+  validateToken.validateToken,
+  checkAdminChurch,
+  memberController.batchDeleteMembers,
+);
+
 router.post(
   "/:id/profile-picture",
   validateToken.validateToken,

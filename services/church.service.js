@@ -500,6 +500,7 @@ class ChurchService {
       photo: member.profile.photo,
       firstName: member.profile.firstName,
       lastName: member.profile.lastName,
+      role: member.orgRole.name,
       fullName: `${member.profile.firstName} ${member.profile.lastName}`,
       email: member.profile.email,
       gender: member.profile.gender,
