@@ -224,7 +224,10 @@ class ContactService {
           },
         },
         { new: true, session },
-      ).populate("assignedTo", "profile.firstName profile.lastName");
+      ).populate(
+        "assignedTo",
+        "profile.firstName profile.lastName profile.photo",
+      );
       await session.commitTransaction();
       return updatedContact;
     } catch (error) {
