@@ -50,5 +50,6 @@ router
 
 router
   .route("/:churchId/contact/:contactId/action/:actionId")
-  .patch(validateToken, contactController.updateAction);
+  .patch(validateToken, contactController.updateAction)
+  .delete(validateToken, contactController.deleteAction);
 module.exports = router;
