@@ -72,7 +72,7 @@ class ContactService {
       contactType: "contact",
     }).populate(
       "assignedTo notes.member createdBy",
-      "profile.firstName profile.lastName",
+      "profile.firstName profile.lastName profile.photo",
     );
     if (!contact) {
       throw new AppError("Contact not found", 404);
