@@ -219,8 +219,12 @@ exports.assignContact = catchAsync(async (req, res, next) => {
 });
 
 exports.unassignContact = catchAsync(async (req, res, next) => {
-  const { contactId, churchId } = req.params;
-  const contact = await ContactService.unassignContact(contactId, churchId);
+  const { contactId, memberId, churchId } = req.params;
+  const contact = await ContactService.unassignContact(
+    contactId,
+    memberId,
+    churchId,
+  );
   res.status(200).json({
     status: "success",
     message: "Contact unassigned successfully",
