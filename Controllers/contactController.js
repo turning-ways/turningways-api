@@ -311,7 +311,7 @@ exports.deleteAction = catchAsync(async (req, res, next) => {
     status: "success",
     message: "Action deleted successfully",
     data: {
-      action: contact.action,
+      action: "",
     },
   });
 });
