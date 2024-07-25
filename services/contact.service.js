@@ -132,7 +132,6 @@ class ContactService {
           { "profile.phone.mainPhone": data.phone },
         ],
         churchId,
-        contactType: "contact",
         _id: { $ne: contactId },
       });
       if (contactExists) {
