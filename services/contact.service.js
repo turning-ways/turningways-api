@@ -125,6 +125,23 @@ class ContactService {
         },
       ];
 
+      // check if email or phone number already exists
+      const contactExists = await Contact.findOne({
+        $or: [
+          { "profile.email": data.email },
+          { "profile.phone.mainPhone": data.phone },
+        ],
+        churchId,
+        contactType: "contact",
+        _id: { $ne: contactId },
+      });
+      if (contactExists) {
+        throw new AppError(
+          "Contact with email or phone number already exists",
+          400,
+        );
+      }
+
       let updatedContact = await Contact.findOneAndUpdate(
         { _id: contactId, churchId },
         updateFields,
