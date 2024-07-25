@@ -196,6 +196,7 @@ exports.getContactByNameSearch = catchAsync(async (req, res, next) => {
           { "profile.lastName": { $regex: search, $options: "i" } },
           { "profile.email": { $regex: search, $options: "i" } },
         ],
+        isDeleted: false,
       },
     },
     {
