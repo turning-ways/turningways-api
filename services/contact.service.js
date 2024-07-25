@@ -87,7 +87,10 @@ class ContactService {
       isDeleted: false,
     })
       .select("-notes -action")
-      .populate("assignedTo", "profile.firstName profile.lastName");
+      .populate(
+        "assignedTo",
+        "profile.firstName profile.lastName profile.photo",
+      );
     return contacts;
   }
 
