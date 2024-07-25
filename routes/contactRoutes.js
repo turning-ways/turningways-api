@@ -17,7 +17,7 @@ router
 
 router
   .route("/:churchId/contact/:contactId/status")
-  .get(validateToken, contactController.changeStatus);
+  .post(validateToken, contactController.changeStatus);
 
 router
   .route("/:churchId/contact/:contactId/notes")
