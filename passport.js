@@ -11,7 +11,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:4000/api/v1/auth/google/admin/callback",
+      callbackURL:
+        "https://turningways-api-3hcn/api/v1/auth/google/admin/callback",
       // passReqToCallback: true,
     },
     async (accessToken, refreshToken, profile, done) => {
