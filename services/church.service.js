@@ -7,6 +7,7 @@ const Church = require("../model/churchModel");
 const Role = require("../model/roleModel");
 const { logger } = require("../utils/logger");
 const AppError = require("../utils/appError");
+const MemberService = require("./member.service");
 
 const permissions = {
   church: ["CREATE_CHURCH", "UPDATE_CHURCH", "DELETE_CHURCH"],
@@ -80,7 +81,8 @@ const createChurch = async (churchData, session) => {
   return church[0];
 };
 
-const createChurchOnBoardingService = async (churchData, req) => {
+const createChurchOnBoardingService = async (memberData, churchData, req) => {
+  const userDetails = req.user;
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -191,10 +193,21 @@ const createChurchOnBoardingService = async (churchData, req) => {
       { session },
     );
 
+    const member = await MemberService.createMemberOnboarding(
+      memberData,
+      userId,
+      church._id,
+      userDetails,
+      session,
+    );
+
     logger.info(`Church created with ID: ${church._id}`);
     await session.commitTransaction();
     session.endSession();
-    return church;
+    return {
+      member,
+      church,
+    };
   } catch (error) {
     await session.abortTransaction();
     session.endSession();

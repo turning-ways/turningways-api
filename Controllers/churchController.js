@@ -10,8 +10,12 @@ const ChurchService = require("../services/church.service");
 exports.createChurchOnboarding = [
   churchValidation.churchOnBoardingValidation,
   catchAsync(async (req, res, next) => {
-    const churchData = req.body;
-    const church = await churchService.createChurchOnBoarding(churchData, req);
+    const { churchData, memberData } = req.body;
+    const church = await churchService.createChurchOnBoarding(
+      memberData,
+      churchData,
+      req,
+    );
     res.status(201).json({
       status: "success",
       message: "Church created successfully",

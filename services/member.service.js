@@ -7,93 +7,88 @@ const { logger } = require("../utils/logger");
 const helper = require("../utils/helpers");
 
 class MemberService {
-  static async createMemberOnboarding(data, userId, userDetails) {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-    try {
-      // Validate input data
-      if (
-        !data.churchId ||
-        !data.gender ||
-        !data.dateOfBirth ||
-        !data.phone ||
-        !data.howDidYouHear
-      ) {
-        throw new AppError("Missing required fields", 400);
-      }
-
-      // Check if the userId exists
-      const userExists = await User.findById(userId);
-      if (!userExists) {
-        throw new AppError("User Id does not exist", 404);
-      }
-      if (userExists.mainChurch.toString() !== data.churchId) {
-        throw new AppError("There was an Error creating this Member", 400);
-      }
-
-      // Check if the user has a role == admin
-      if (userExists.role !== "admin") {
-        throw new AppError(
-          "You do not have the permission to create a member",
-          403,
-        );
-      }
-
-      // Check the role super-admin exists for that churchId
-      const roleExists = await Role.findOne({
-        church: data.churchId,
-        name: "Super-Admin",
-      });
-      if (!roleExists) {
-        throw new AppError(
-          "Super-Admin role does not exist for this church",
-          404,
-        );
-      }
-
-      // Check for duplicate member
-      const duplicateMember = await Member.findOne({
-        "profile.email": userDetails.email,
-        churchId: data.churchId,
-        contactType: "member",
-      });
-      if (duplicateMember) {
-        throw new AppError("Member with this email already exists", 409);
-      }
-
-      const member = new Member({
-        userId,
-        orgRole: roleExists._id,
-        churchId: data.churchId,
-        profile: {
-          firstName: userDetails.firstName,
-          middleName: data.middleName,
-          lastName: userDetails.lastName,
-          gender: data.gender,
-          dateOfBirth: data.dateOfBirth,
-          phone: {
-            mainPhone: data.phone,
-          },
-          email: userDetails.email,
-        },
-        howDidYouHear: data.howDidYouHear,
-        verification: "incomplete",
-        contactType: "member",
-      });
-      const newMember = await member.save({ session });
-      if (!newMember) {
-        throw new AppError("Member not created", 400);
-      }
-      await session.commitTransaction();
-      logger.info(`Member created with ID: ${newMember._id}`);
-      return newMember;
-    } catch (error) {
-      await session.abortTransaction();
-      logger.error(`Error creating member: ${error.message}`);
-      throw new AppError(error.message, 400);
-    } finally {
-      session.endSession();
+  static async createMemberOnboarding(
+    data,
+    churchId,
+    userId,
+    userDetails,
+    session,
+  ) {
+    // Validate input data
+    if (
+      !data.gender ||
+      !data.dateOfBirth ||
+      !data.phone ||
+      !data.howDidYouHear
+    ) {
+      throw new AppError("Missing required fields", 400);
     }
+
+    // Check if the userId exists
+    const userExists = await User.findById(userId);
+    if (!userExists) {
+      throw new AppError("User Id does not exist", 404);
+    }
+    if (userExists.mainChurch.toString() !== data.churchId) {
+      throw new AppError("There was an Error creating this Member", 400);
+    }
+
+    // Check if the user has a role == admin
+    if (userExists.role !== "admin") {
+      throw new AppError(
+        "You do not have the permission to create a member",
+        403,
+      );
+    }
+
+    // Check the role super-admin exists for that churchId
+    const roleExists = await Role.findOne({
+      church: churchId,
+      name: "Super-Admin",
+    });
+    if (!roleExists) {
+      throw new AppError(
+        "Super-Admin role does not exist for this church",
+        404,
+      );
+    }
+
+    // Check for duplicate member
+    const duplicateMember = await Member.findOne({
+      "profile.email": userDetails.email,
+      churchId: churchId,
+      contactType: "member",
+    });
+    if (duplicateMember) {
+      throw new AppError("Member with this email already exists", 409);
+    }
+
+    const member = new Member({
+      userId,
+      orgRole: roleExists._id,
+      churchId: churchId,
+      profile: {
+        firstName: userDetails.firstName,
+        middleName: data.middleName,
+        lastName: userDetails.lastName,
+        gender: data.gender,
+        dateOfBirth: data.dateOfBirth,
+        phone: {
+          mainPhone: data.phone,
+        },
+        email: userDetails.email,
+      },
+      howDidYouHear: data.howDidYouHear,
+      verification: "verified",
+      contactType: "member",
+    });
+    const newMember = await member.save({ session });
+    if (!newMember) {
+      throw new AppError("Member not created", 400);
+    }
+
+    logger.info(`Member created with ID: ${newMember._id}`);
+    return newMember;
   }
 
   static async createMember(data) {
