@@ -244,8 +244,8 @@ class AuthService {
         contactType: "member",
       }).populate("orgRole", "name");
 
-      const accessToken = TokenService.generateAccessToken(user);
-      const refreshToken = TokenService.generateRefreshToken(user);
+      const accessToken = await TokenService.generateAccessToken(user);
+      const refreshToken = await TokenService.generateRefreshToken(user);
 
       // If the user is an admin, redirect to the admin dashboard
       if (member && member.orgRole.name === "Super-Admin") {
