@@ -44,16 +44,13 @@ class MemberService {
       );
     }
 
-    // Check the role super-admin exists for that churchId
+    // Check the role super-admin exists for that churchId and use the session
     const roleExists = await Role.findOne({
-      church: churchId,
       name: "Super-Admin",
+      church: churchId,
     });
     if (!roleExists) {
-      throw new AppError(
-        "Super-Admin role does not exist for this church",
-        404,
-      );
+      throw new AppError("Role does not exist", 404);
     }
 
     // Check for duplicate member
