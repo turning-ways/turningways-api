@@ -251,8 +251,8 @@ class AuthService {
       if (member && member.orgRole.name === "Super-Admin") {
         return res
           .status(200)
-          .cookie("access_token", accessToken, CookieOptions)
-          .cookie("refresh_token", refreshToken, CookieOptions)
+          .cookie("accessToken", accessToken, CookieOptions)
+          .cookie("refreshToken", refreshToken, CookieOptions)
           .redirect("https://www.turningways.com/admin/dashboard/today");
       }
 
@@ -266,7 +266,7 @@ class AuthService {
         return res
           .status(200)
           .cookie("access_token", accessToken, CookieOptions)
-          .cookie("refresh_token", refreshToken, CookieOptions)
+          .cookie("refreshToken", refreshToken, CookieOptions)
           .redirect("https://www.turningways.com/register/personalinfo");
       }
     } catch (error) {
