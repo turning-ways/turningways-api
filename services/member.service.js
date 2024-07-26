@@ -30,7 +30,7 @@ class MemberService {
       throw new AppError("User Id does not exist", 404);
     }
     if (userExists.mainChurch) {
-      if (userExists.mainChurch.toString() !== data.churchId) {
+      if (userExists.mainChurch.toString() !== churchId) {
         throw new AppError("There was an Error creating this Member", 400);
       }
     }

@@ -195,7 +195,7 @@ const createChurchOnBoardingService = async (memberData, churchData, req) => {
 
     const member = await MemberService.createMemberOnboarding(
       memberData,
-      church._id,
+      church._id.toString(),
       userId,
       userDetails,
       session,
