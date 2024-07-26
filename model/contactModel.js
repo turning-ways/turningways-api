@@ -274,18 +274,6 @@ contactSchema.pre("save", function (next) {
   });
 });
 
-// Check if the churchId exists
-contactSchema.pre("save", function (next) {
-  if (!this.churchId) return next();
-
-  Church.findById(this.churchId).then((church) => {
-    if (!church) {
-      return next(new AppError("No church found with that ID", 404));
-    }
-    next();
-  });
-});
-
 //
 contactSchema.pre("save", function (next) {
   if (!this.profile.suffix) {
