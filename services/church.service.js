@@ -73,7 +73,8 @@ const createDefaultRoles = async (churchId, isHQ, session) => {
     });
   }
 
-  await Role.create(roles, { session });
+  const createdRoles = await Role.create(roles, { session });
+  return createdRoles;
 };
 
 const createChurch = async (churchData, session) => {
@@ -185,7 +186,11 @@ const createChurchOnBoardingService = async (memberData, churchData, req) => {
       );
     }
 
-    await createDefaultRoles(church._id, !churchData.hasParentChurch, session);
+    const createdRoles = await createDefaultRoles(
+      church._id,
+      !churchData.hasParentChurch,
+      session,
+    );
 
     await User.findByIdAndUpdate(
       userId,
@@ -198,6 +203,7 @@ const createChurchOnBoardingService = async (memberData, churchData, req) => {
       church._id.toString(),
       userId,
       userDetails,
+      createdRoles,
       session,
     );
 

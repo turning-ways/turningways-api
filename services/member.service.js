@@ -12,6 +12,7 @@ class MemberService {
     churchId,
     userId,
     userDetails,
+    createdRoles,
     session,
   ) {
     // Validate input data
@@ -45,10 +46,7 @@ class MemberService {
     }
 
     // Check the role super-admin exists for that churchId and use the session
-    const roleExists = await Role.findOne({
-      name: "Super-Admin",
-      church: churchId,
-    });
+    const roleExists = createdRoles.find((role) => role.name === "Super-Admin");
     if (!roleExists) {
       throw new AppError("Role does not exist", 404);
     }
