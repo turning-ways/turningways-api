@@ -24,6 +24,7 @@ class MemberService {
       throw new AppError("Missing required fields", 400);
     }
 
+    console.log(churchId);
     // Check if the userId exists
     const userExists = await User.findById(userId);
     if (!userExists) {
