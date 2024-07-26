@@ -29,8 +29,10 @@ class MemberService {
     if (!userExists) {
       throw new AppError("User Id does not exist", 404);
     }
-    if (userExists.mainChurch.toString() !== data.churchId) {
-      throw new AppError("There was an Error creating this Member", 400);
+    if (userExists.mainChurch) {
+      if (userExists.mainChurch.toString() !== data.churchId) {
+        throw new AppError("There was an Error creating this Member", 400);
+      }
     }
 
     // Check if the user has a role == admin
