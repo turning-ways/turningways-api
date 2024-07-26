@@ -253,7 +253,7 @@ class AuthService {
           .status(200)
           .cookie("access_token", accessToken, CookieOptions)
           .cookie("refresh_token", refreshToken, CookieOptions)
-          .redirect("https://www.turningways.com");
+          .redirect("https://www.turningways.com/admin/dashboard/today");
       }
 
       // If the user is not an admin, redirect to the home
@@ -267,7 +267,7 @@ class AuthService {
           .status(200)
           .cookie("access_token", accessToken, CookieOptions)
           .cookie("refresh_token", refreshToken, CookieOptions)
-          .redirect("https://www.turningways.com");
+          .redirect("https://www.turningways.com/register/personalinfo");
       }
     } catch (error) {
       console.error("Error in handleGoogleAdminCallback:", error);
