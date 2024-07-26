@@ -64,13 +64,20 @@ exports.Login = [
 exports.RefreshToken = [
   catchAsync(async (req, res, next) => {
     const { refreshToken } = req.cookies;
+    const { rc } = req.body;
     if (!refreshToken) {
       return res.status(401).json({
         status: "error",
         message: "Access denied: No token provided.",
       });
     }
-    const user = await TokenService.verifyRefreshToken(refreshToken);
+    let user;
+    if (!rc) {
+      user = await TokenService.verifyRefreshToken(refreshToken);
+    } else {
+      user = await TokenService.verifyRefreshToken(rc);
+    }
+
     const userExists = await UserService.findUserById(user.id);
     if (!user) {
       return res.status(401).json({
