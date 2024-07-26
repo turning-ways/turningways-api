@@ -217,8 +217,8 @@ const createChurchOnBoardingService = async (memberData, churchData, req) => {
 };
 
 class ChurchService {
-  static async createChurchOnBoarding(churchData, req) {
-    return createChurchOnBoardingService(churchData, req);
+  static async createChurchOnBoarding(memberData, churchData, req) {
+    return createChurchOnBoardingService(memberData, churchData, req);
   }
 
   static async findChurchById(id) {
