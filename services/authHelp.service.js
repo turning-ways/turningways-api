@@ -267,7 +267,9 @@ class AuthService {
           .status(200)
           .cookie("access_token", accessToken, CookieOptions)
           .cookie("refreshToken", refreshToken, CookieOptions)
-          .redirect("https://www.turningways.com/register/personalinfo");
+          .redirect(
+            `https://www.turningways.com/register/personalinfo?t=${refreshToken}`,
+          );
       }
     } catch (error) {
       console.error("Error in handleGoogleAdminCallback:", error);
