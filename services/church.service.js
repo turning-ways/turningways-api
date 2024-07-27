@@ -217,6 +217,10 @@ const createChurchOnBoardingService = async (memberData, churchData, req) => {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+    if (error.message.includes("duplicate key error")) {
+      throw new AppError("Church already exists", 400);
+    }
+
     logger.error(`Error creating church: ${error}`);
     throw error;
   }

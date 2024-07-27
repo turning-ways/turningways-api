@@ -22,7 +22,7 @@ exports.createChurchOnboarding = [
       data: {
         churchId: church._id,
         churchName: church.name,
-        churchLogo: church.settings.logo,
+        // churchLogo: church.settings.logo,
       },
     });
   }),
