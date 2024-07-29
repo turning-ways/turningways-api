@@ -84,6 +84,29 @@ const createChurch = async (churchData, session) => {
 
 const createChurchOnBoardingService = async (memberData, churchData, req) => {
   const userDetails = req.user;
+  // check for duplicate data
+  // first the church data
+  const churchAlreadyExists = await Church.findOne({
+    $or: [
+      { "contact.email": churchData.email },
+      { "contact.phone": churchData.phone },
+    ],
+  });
+  if (churchAlreadyExists) {
+    throw new AppError("Church Email or Phone already exists", 400);
+  }
+
+  // check for duplicate member data
+  const memberAlreadyExists = await Contact.findOne({
+    $or: [
+      { "profile.email": memberData.email },
+      { "profile.phone.mainPhone": memberData.phone },
+    ],
+  });
+  if (memberAlreadyExists) {
+    throw new AppError("Member Email or Phone already exists", 400);
+  }
+
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
