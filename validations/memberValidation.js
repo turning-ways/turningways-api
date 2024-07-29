@@ -14,7 +14,13 @@ exports.memberOnboardingValidation = [
 ];
 
 const genderEnum = ["male", "female"];
-const maritalStatusEnum = ["single", "married", "divorced", "widowed"];
+const maritalStatusEnum = [
+  "single",
+  "married",
+  "divorced",
+  "widowed",
+  "undefined",
+];
 
 exports.addMemberValidation = [
   body("firstName").notEmpty().withMessage("First name is required"),
