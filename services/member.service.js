@@ -66,7 +66,7 @@ class MemberService {
       orgRole: roleExists._id,
       churchId: churchId,
       profile: {
-        firstName: userDetails.firstName,
+        firstName: userExists.firstName,
         middleName: data.middleName,
         lastName: userDetails.lastName,
         gender: data.gender,
@@ -74,6 +74,7 @@ class MemberService {
         phone: {
           mainPhone: data.phone,
         },
+        photo: userExists.photo,
         email: data.email,
       },
       howDidYouHear: data.howDidYouHear,

@@ -181,6 +181,7 @@ exports.getMe = catchAsync(async (req, res, next) => {
         memberId: member._id,
         firstName: member.profile.firstName,
         lastName: member.profile.lastName,
+        photo: member.profile.photo,
         role: member.orgRole.name,
         church: member.churchId.name,
         churchId: member.churchId._id,
