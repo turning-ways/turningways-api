@@ -74,7 +74,7 @@ class MemberService {
         phone: {
           mainPhone: data.phone,
         },
-        email: userDetails.email,
+        email: data.email,
       },
       howDidYouHear: data.howDidYouHear,
       verification: "verified",
