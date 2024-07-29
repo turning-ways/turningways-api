@@ -15,7 +15,7 @@ class ContactService {
       throw new AppError("Church not found", 404);
     }
 
-    ?// Check if the contact already exists
+    // Check if the contact already exists
     const contactExists = await Contact.findOne({
       email: data.email,
       churchId,
