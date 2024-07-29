@@ -14,6 +14,24 @@ class ContactService {
     if (!church) {
       throw new AppError("Church not found", 404);
     }
+
+    ?// Check if the contact already exists
+    const contactExists = await Contact.findOne({
+      email: data.email,
+      churchId,
+    });
+    if (contactExists) {
+      throw new AppError("Email already exists", 400);
+    }
+    // for phone number
+    const phoneExists = await Contact.findOne({
+      "profile.phone.mainPhone": data.phone,
+      churchId,
+    });
+    if (phoneExists) {
+      throw new AppError("Phone number already exists", 400);
+    }
+
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
