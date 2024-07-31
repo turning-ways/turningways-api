@@ -556,7 +556,7 @@ class MemberService {
         _id: id,
         contactType: "member",
         notes: { $elemMatch: { _id: noteId } },
-      });
+      }).populate("notes.member", "profile.firstName profile.lastName");
 
       if (!member) {
         throw new AppError("Member not updated", 400);
