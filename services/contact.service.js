@@ -16,7 +16,7 @@ class ContactService {
     }
 
     // Check if the contact already exists
-    if (data.email !== undefined || data.email !== null || data.email !== "") {
+    if (data.email !== undefined && data.email !== null && data.email !== "") {
       const contactExists = await Contact.findOne({
         "profile.email": data.email,
         churchId,
