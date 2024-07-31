@@ -95,13 +95,27 @@ class MemberService {
     session.startTransaction();
     try {
       // Check for duplicate member
-      const duplicateMember = await Member.findOne({
-        "profile.email": data.email,
+      if (
+        data.email !== undefined &&
+        data.email !== null &&
+        data.email !== ""
+      ) {
+        const duplicateMember = await Member.findOne({
+          "profile.email": data.email,
+          churchId: data.churchId,
+          contactType: "member",
+        });
+        if (duplicateMember) {
+          throw new AppError("Member with this email already exists", 409);
+        }
+      }
+
+      const phoneExists = await Member.findOne({
+        "profile.phone.mainPhone": data.phone,
         churchId: data.churchId,
-        contactType: "member",
       });
-      if (duplicateMember) {
-        throw new AppError("Member with this email already exists", 409);
+      if (phoneExists) {
+        throw new AppError("Phone number already exists", 400);
       }
 
       // get the member role
