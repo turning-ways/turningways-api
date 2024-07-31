@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const AppError = require("../utils/appError");
 const User = require("./userModel");
-const Church = require("./churchModel");
+// const Church = require("./churchModel");
 
 const contactSchema = new mongoose.Schema(
   {

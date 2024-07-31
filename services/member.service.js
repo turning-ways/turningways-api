@@ -516,14 +516,9 @@ class MemberService {
         throw new AppError("Member not found", 404);
       }
 
-      // Log the member and notes to debug
-      console.log("Member:", member);
-      console.log("Notes:", member.notes);
-
       const notes = member.notes
         .map((note) => {
           if (!note.member) {
-            console.log("Note member is undefined for note:", note);
             return null; // or handle this case as needed
           }
           return {
