@@ -16,13 +16,16 @@ class ContactService {
     }
 
     // Check if the contact already exists
-    const contactExists = await Contact.findOne({
-      "profile.email": data.email,
-      churchId,
-    });
-    if (contactExists) {
-      throw new AppError("Email already exists", 400);
+    if (data.email !== undefined || data.email !== null || data.email !== "") {
+      const contactExists = await Contact.findOne({
+        "profile.email": data.email,
+        churchId,
+      });
+      if (contactExists) {
+        throw new AppError("Email already exists", 400);
+      }
     }
+
     // for phone number
     const phoneExists = await Contact.findOne({
       "profile.phone.mainPhone": data.phone,
