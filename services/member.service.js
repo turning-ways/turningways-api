@@ -174,7 +174,7 @@ class MemberService {
       }
 
       // form the requestKey for the cache
-      const requestUrl = `/api/v1/churches/${data.churchId}/members/`;
+      const requestUrl = `/api/v1/churches/${data.churchId}/members`;
       const requestKey = hash(requestUrl);
       await clearCache(requestKey);
 
@@ -351,7 +351,7 @@ class MemberService {
       }
 
       // form the requestKey for the cache
-      const requestUrl = `/api/v1/churches/${member.churchId}/members/`;
+      const requestUrl = `/api/v1/churches/${member.churchId}/members`;
       const requestKey = hash(requestUrl);
       await clearCache(requestKey);
 
@@ -384,7 +384,7 @@ class MemberService {
       }
 
       // form the requestKey for the cache
-      const requestUrl = `/api/v1/churches/${member.churchId}/members/`;
+      const requestUrl = `/api/v1/churches/${member.churchId}/members`;
       const requestKey = hash(requestUrl);
       await clearCache(requestKey);
 
