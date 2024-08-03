@@ -27,6 +27,7 @@ async function initializeRedisClient() {
 function requestToKey(req) {
   // check the url is in the format /api/v1/churches/:churchId/members
   const url = req.originalUrl;
+  console.log("Request URL:", url);
   const parts = url.split("/");
   if (
     parts.length !== 5 ||
