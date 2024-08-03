@@ -85,7 +85,7 @@ function cacheMiddleware(options = { EX: 21600 }) {
         console.log("Cache hit");
         return res.json({
           source: "cache",
-          data: JSON.parse(cachedData),
+          data: cachedDatas,
         });
       }
       console.log("Cache miss");
