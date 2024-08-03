@@ -101,7 +101,7 @@ function cacheMiddleware(options = { EX: 21600 }) {
 
       if (res.statusCode >= 200 && res.statusCode < 300) {
         try {
-          await writeData(key, JSON.stringify(data), options);
+          await writeData(key, JSON.stringify(data.data), options);
           console.log("Data cached successfully");
         } catch (error) {
           console.error("Error writing to cache:", error);
