@@ -30,10 +30,10 @@ function requestToKey(req) {
   console.log("Request URL:", url);
   const parts = url.split("/");
   // check if the request has query parameters
-  // const query = req.query;
-  // if (Object.keys(query).length > 0) {
-  //   return null;
-  // }
+  const query = req.query;
+  if (Object.keys(query).length > 0) {
+    return null;
+  }
   // hash the request url
   return hash(url);
 }
@@ -77,6 +77,10 @@ function cacheMiddleware(options = { EX: 21600 }) {
     }
 
     const key = requestToKey(req);
+    if (!key) {
+      console.warn("Skipping cache middleware for request:", req.originalUrl);
+      return next();
+    }
     console.log("Cache key:", key);
 
     try {
