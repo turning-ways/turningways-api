@@ -29,14 +29,6 @@ function requestToKey(req) {
   const url = req.originalUrl;
   console.log("Request URL:", url);
   const parts = url.split("/");
-  if (
-    parts.length !== 5 ||
-    parts[1] !== "api" ||
-    parts[2] !== "v1" ||
-    parts[3] !== "churches"
-  ) {
-    return null;
-  }
   // check if the request has query parameters
   // const query = req.query;
   // if (Object.keys(query).length > 0) {
