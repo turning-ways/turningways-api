@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
+const hash = require("object-hash");
 const User = require("../model/userModel");
 const Role = require("../model/roleModel");
 const Member = require("../model/contactModel");
 const AppError = require("../utils/appError");
 const { logger } = require("../utils/logger");
 const helper = require("../utils/helpers");
+
+const { clearCache } = require("../middlewares/redis");
 
 class MemberService {
   static async createMemberOnboarding(
@@ -169,6 +172,11 @@ class MemberService {
       if (!member || member.length === 0) {
         throw new AppError("Member not created", 400);
       }
+
+      // form the requestKey for the cache
+      const requestUrl = `/api/v1/churches/${data.churchId}/members/`;
+      const requestKey = hash(requestUrl);
+      await clearCache(requestKey);
 
       await session.commitTransaction();
       logger.info(`Member created with ID: ${member[0]._id}`);
@@ -342,6 +350,11 @@ class MemberService {
         throw new AppError("Member not updated", 400);
       }
 
+      // form the requestKey for the cache
+      const requestUrl = `/api/v1/churches/${member.churchId}/members/`;
+      const requestKey = hash(requestUrl);
+      await clearCache(requestKey);
+
       await session.commitTransaction();
       logger.info(`Member updated with ID: ${id}`);
       return member;
@@ -369,6 +382,12 @@ class MemberService {
       if (!member) {
         throw new AppError("Member not deleted", 400);
       }
+
+      // form the requestKey for the cache
+      const requestUrl = `/api/v1/churches/${member.churchId}/members/`;
+      const requestKey = hash(requestUrl);
+      await clearCache(requestKey);
+
       logger.info(`Member soft deleted with ID: ${id}`);
       return member;
     } catch (error) {

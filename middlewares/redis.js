@@ -25,15 +25,28 @@ async function initializeRedisClient() {
 }
 
 function requestToKey(req) {
-  const reqDataToHash = {
-    method: req.method,
-    path: req.path,
-    query: req.query,
-    body: req.body,
-    headers: req.headers,
-  };
-
-  return `${req.method}:${req.path}@${hash.sha1(reqDataToHash)}`;
+  // check if the request is a GET request
+  if (req.method !== "GET") {
+    return null;
+  }
+  // check the url is in the format /api/v1/churches/:churchId/members
+  const url = req.originalUrl;
+  const parts = url.split("/");
+  if (
+    parts.length !== 5 ||
+    parts[1] !== "api" ||
+    parts[2] !== "v1" ||
+    parts[3] !== "churches"
+  ) {
+    return null;
+  }
+  // check if the request has query parameters
+  const query = req.query;
+  if (Object.keys(query).length > 0) {
+    return null;
+  }
+  // hash the request url
+  return hash(url);
 }
 
 function isRedisWorking() {
@@ -113,19 +126,14 @@ function cacheMiddleware(options = { EX: 21600 }) {
   };
 }
 
-async function clearCache(pattern = "*") {
+async function clearCache(key) {
   if (!isRedisWorking()) {
     throw new Error("Redis client is not connected");
   }
 
   try {
-    const keys = await redisClient.keys(pattern);
-    if (keys.length > 0) {
-      await redisClient.del(keys);
-      console.log(`Cleared ${keys.length} keys from cache`);
-    } else {
-      console.log("No keys found to clear");
-    }
+    await redisClient.del(key);
+    console.log("Cache cleared successfully");
   } catch (error) {
     console.error("Failed to clear cache:", error);
     throw error;
