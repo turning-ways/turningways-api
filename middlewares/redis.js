@@ -25,10 +25,6 @@ async function initializeRedisClient() {
 }
 
 function requestToKey(req) {
-  // check if the request is a GET request
-  if (req.method !== "GET") {
-    return null;
-  }
   // check the url is in the format /api/v1/churches/:churchId/members
   const url = req.originalUrl;
   const parts = url.split("/");
@@ -41,10 +37,10 @@ function requestToKey(req) {
     return null;
   }
   // check if the request has query parameters
-  const query = req.query;
-  if (Object.keys(query).length > 0) {
-    return null;
-  }
+  // const query = req.query;
+  // if (Object.keys(query).length > 0) {
+  //   return null;
+  // }
   // hash the request url
   return hash(url);
 }
