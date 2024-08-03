@@ -59,7 +59,7 @@ async function writeData(key, data, options = {}) {
   }
 
   try {
-    await redisClient.set(key, JSON.stringify(data), options);
+    await redisClient.set(key, data, options);
   } catch (error) {
     console.error("Failed to write data to Redis:", error);
     throw error;
@@ -96,7 +96,7 @@ function cacheMiddleware(options = { EX: 21600 }) {
         console.log("Cache hit");
         return res.json({
           source: "cache",
-          data: cachedData,
+          data: JSON.parse(cachedData),
         });
       }
       console.log("Cache miss");
