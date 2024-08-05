@@ -201,7 +201,7 @@ exports.Logout = async (req, res) => {
   await user.save();
   res
     .status(200)
-    .clearCookie("refresh_token", CookieOptions)
+    .clearCookie("refreshToken", CookieOptions)
     .json({ message: "User logged out" });
 };
 
