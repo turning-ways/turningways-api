@@ -398,8 +398,8 @@ class ChurchService {
       // Query based on date range
       const membersJoined = await Contact.find({
         churchId,
-        createdAt: { $gte: dateRange.start, $lte: dateRange.end },
         isDeleted: false,
+        createdAt: { $gte: dateRange.start, $lte: dateRange.end },
       }).select(
         "profile.firstName profile.lastName _id profile.email profile.phone.mainPhone profile.dateOfBirth profile.gender profile.maritalStatus createdAt contactType profile.photo profile.anniversaries verification profile.active",
       );

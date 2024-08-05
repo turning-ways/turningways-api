@@ -51,12 +51,14 @@ const churchSchema = new mongoose.Schema(
         trim: true,
         unique: true,
         validate: [validator.isEmail, "Please provide a valid email"],
+        index: true,
       },
       phone: {
         type: String,
         unique: [true, "Phone number already exists"],
         sparse: true,
         minlength: [10, "Phone number must be 10 or more characters long"],
+        index: true,
       },
     },
     settings: {
@@ -89,6 +91,7 @@ const churchSchema = new mongoose.Schema(
     isDeleted: {
       type: Boolean,
       default: false,
+      index: true,
     },
   },
   {
@@ -96,6 +99,12 @@ const churchSchema = new mongoose.Schema(
     toJSON: { virtuals: true },
   },
 );
+
+// Add indexes
+churchSchema.index({ createdAt: 1 }); // Index on createdAt field
+churchSchema.index({ updatedAt: 1 }); // Index on updatedAt field
+churchSchema.index({ isDeleted: 1 }); // Index on isDeleted field
+churchSchema.index({ createdAt: 1, isDeleted: 1 }); // Compound index for querying ranges and deletion status
 
 churchSchema.pre(/^find/, function (next) {
   this.find({ isDeleted: { $ne: true } });
@@ -105,5 +114,3 @@ churchSchema.pre(/^find/, function (next) {
 const Church = mongoose.model("Church", churchSchema);
 
 module.exports = Church;
-
-// Todo: an admin can only be an admin to his own church

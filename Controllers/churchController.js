@@ -262,4 +262,5 @@ exports.getMembersStats = catchAsync(async (req, res, next) => {
       MembersJoined: memberStats2,
     },
   });
+
 });

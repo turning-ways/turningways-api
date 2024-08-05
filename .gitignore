@@ -2,3 +2,5 @@ node_modules
 logs
 *.env
 *.html
+migrations
+migrate-mongo-config.js

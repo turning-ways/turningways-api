@@ -1,4 +1,3 @@
-/* eslint-disable node/no-unpublished-require */
 const mongoose = require("mongoose");
 const validator = require("validator");
 const AppError = require("../utils/appError");
@@ -10,11 +9,13 @@ const contactSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      index: true, // Index on userId
     },
     churchId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Church",
       required: true,
+      index: true, // Index on churchId
     },
     orgRole: {
       type: mongoose.Schema.Types.ObjectId,
@@ -176,6 +177,7 @@ const contactSchema = new mongoose.Schema(
       type: String,
       enum: ["member", "contact", "visitor"],
       default: "member",
+      index: true, // Index on contactType
     },
     verification: {
       type: String,
@@ -253,6 +255,7 @@ const contactSchema = new mongoose.Schema(
     isDeleted: {
       type: Boolean,
       default: false,
+      index: true, // Index on isDeleted
     },
   },
   {
@@ -274,7 +277,7 @@ contactSchema.pre("save", function (next) {
   });
 });
 
-//
+// Set suffix based on gender
 contactSchema.pre("save", function (next) {
   if (!this.profile.suffix) {
     if (this.profile.gender === "male") {
@@ -294,13 +297,13 @@ contactSchema.post("save", (doc, next) => {
     });
 });
 
-// populate the orgRole and select only the name
+// Populate the orgRole and select only the name
 contactSchema.pre(/^find/, function (next) {
   this.populate({ path: "orgRole", select: "name" });
   next();
 });
 
-//Virtual Properties for Age
+// Virtual Properties for Age
 contactSchema.virtual("age").get(function () {
   if (!this.profile.dateOfBirth) return null;
   const currentYear = new Date().getFullYear();
