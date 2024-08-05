@@ -531,8 +531,8 @@ class ChurchService {
   static async getAllMembers(churchId, limit, skip) {
     const members = await Contact.find({
       churchId,
-      isDeleted: false,
       contactType: "member",
+      isDeleted: false,
     })
       .select(
         "profile.firstName profile.lastName profile.email profile.phone profile.gender profile.dateOfBirth profile.photo createdBy",
