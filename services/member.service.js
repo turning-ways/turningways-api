@@ -578,10 +578,10 @@ class MemberService {
       }
 
       member.updateNote(noteId, data);
-      const updateMember = await Member.findOne(
-        { "notes._id": noteId },
-        "notes",
-      ).populate("notes.member", "profile.firstName profile.lastName");
+      const updateMember = await Member.findOne({ _id: id }, "notes").populate(
+        "notes.member",
+        "profile.firstName profile.lastName",
+      );
 
       const notes = updateMember.notes.map((note) => ({
         id: note._id,
