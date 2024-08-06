@@ -545,6 +545,7 @@ class MemberService {
             comment: note.comment,
             date: note.date,
             type: note.type,
+            isEdited: note.isEdited,
             createdBy: {
               id: note.member._id,
               name: `${note.member.profile.firstName} ${note.member.profile.lastName}`,
@@ -584,6 +585,7 @@ class MemberService {
         comment: note.comment,
         date: note.date,
         type: note.type,
+        isEdited: note.isEdited,
         createdBy: {
           id: note.member._id,
           name: `${note.member.profile.firstName} ${note.member.profile.lastName}`,

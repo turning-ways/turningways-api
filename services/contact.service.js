@@ -52,7 +52,6 @@ class ContactService {
               email: data.email,
               phone: { mainPhone: data.phone },
             },
-            contactType: "contact",
             verification: "unverified",
             contactStatus: "new",
             memberStatus: "potential",
@@ -90,7 +89,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     }).populate(
       "assignedTo notes.member createdBy",
       "profile.firstName profile.lastName profile.photo",
@@ -104,7 +102,6 @@ class ContactService {
   static async getContacts(churchId) {
     const contacts = await Contact.find({
       churchId,
-      contactType: "contact",
       isDeleted: false,
     })
       .select("-notes -action")
@@ -119,7 +116,6 @@ class ContactService {
     const contact = await Contact.find({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
 
     if (!contact) {
@@ -196,7 +192,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
     if (!contact) {
       throw new AppError("Contact not found", 404);
@@ -239,7 +234,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
 
     if (!contact) {
@@ -283,7 +277,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
 
     if (!contact) {
@@ -321,7 +314,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
     if (!contact) {
       throw new AppError("Contact not found", 404);
@@ -349,7 +341,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
     if (!contact) {
       throw new AppError("Contact not found", 404);
@@ -380,7 +371,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
 
     if (!contact) {
@@ -418,7 +408,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
     if (!contact) {
       throw new AppError("Contact not found", 404);
@@ -430,7 +419,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
 
     if (!contact) {
@@ -463,7 +451,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     }).populate("notes.member", "profile.firstName profile.lastName");
     if (!contact) {
       throw new AppError("Contact not found", 404);
@@ -478,7 +465,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
 
     if (!contact) {
@@ -520,7 +506,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     }).populate("notes.member", "profile.firstName profile.lastName");
     if (!contact) {
       throw new AppError("Contact not found", 404);
@@ -534,6 +519,7 @@ class ContactService {
       }
       note.comment = data.note;
       note.member = data.modifiedBy;
+      note.isEdited = true;
       note.date = Date.now();
       const updatedContact = await contact.save({ session });
       await session.commitTransaction();
@@ -553,7 +539,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
     if (!contact) {
       throw new AppError("Contact not found", 404);
@@ -583,7 +568,6 @@ class ContactService {
     const contact = await Contact.findOne({
       _id: contactId,
       churchId,
-      contactType: "contact",
     });
     if (!contact) {
       throw new AppError("Contact not found", 404);
@@ -616,7 +600,6 @@ class ContactService {
       const contact = await Contact.deleteOne({
         _id: contactId,
         churchId,
-        contactType: "contact",
       });
       await session.commitTransaction();
       return contact;

@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 const mongoose = require("mongoose");
 const validator = require("validator");
 const AppError = require("../utils/appError");
@@ -241,6 +242,10 @@ const contactSchema = new mongoose.Schema(
           enum: ["general", "prayer", "support", "contact"],
           default: "general",
         },
+        isEdited: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     createdBy: {
@@ -323,6 +328,7 @@ contactSchema.methods.updateNote = function (noteId, data) {
   }
   note.date = Date.now();
   note.type = "general";
+  note.isEdited = true;
   note.comment = data.note;
   return this.save();
 };
