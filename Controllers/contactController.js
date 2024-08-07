@@ -121,6 +121,7 @@ exports.updateContact = [
           address: contact.profile.address.homeAddress,
           phone: contact.profile.phone.mainPhone || null,
           contactStatus: contact.contactStatus || null,
+          contactType: contact.contactType || null,
           memberStatus: contact.memberStatus || null,
           maturityLevel: contact.maturityLevel || null,
           educatonalLevel: contact.profile.educationalLevel || null,

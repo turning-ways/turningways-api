@@ -54,7 +54,6 @@ class ContactService {
             },
             verification: "unverified",
             contactStatus: "new",
-            memberStatus: "potential",
             maturityLevel: data.maturityLevel,
             notes: [
               {
@@ -135,11 +134,12 @@ class ContactService {
       if (data.email) updateFields["profile.email"] = data.email;
       if (data.phone) updateFields["profile.phone.mainPhone"] = data.phone;
       if (data.maturityLevel) updateFields.maturityLevel = data.maturityLevel;
-      if (data.memberStatus) updateFields.memberStatus = data.memberStatus;
+      if (data.contactType) updateFields.contactType = data.contactType;
       updateFields.notes = [
         {
           comment: "Contact updated",
           type: "contact",
+          // generate a new timestamp
           date: moment().format(),
           member: data.modifiedBy,
         },

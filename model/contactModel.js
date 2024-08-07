@@ -176,7 +176,14 @@ const contactSchema = new mongoose.Schema(
     },
     contactType: {
       type: String,
-      enum: ["member", "contact", "visitor"],
+      enum: [
+        "member",
+        "regular",
+        "visitor",
+        "participant",
+        "inprogress",
+        "undefined",
+      ],
       default: "member",
       index: true, // Index on contactType
     },
