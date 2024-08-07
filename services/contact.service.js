@@ -477,6 +477,7 @@ class ContactService {
       const note = {
         comment: data.note,
         type: "contact",
+        date: moment().format(),
         member: data.createdBy,
       };
 
