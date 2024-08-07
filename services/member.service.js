@@ -589,11 +589,6 @@ class MemberService {
         date: note.date,
         type: note.type,
         isEdited: note.isEdited,
-        createdBy: {
-          id: note.member._id,
-          name: `${note.member.profile.firstName} ${note.member.profile.lastName}`,
-          role: note.member.orgRole.name,
-        },
       }));
 
       await session.commitTransaction();
