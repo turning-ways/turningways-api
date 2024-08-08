@@ -344,6 +344,7 @@ class MemberService {
         updateFields["profile.healthConditionRemarks"] =
           data.healthConditionRemarks;
       if (data.modifiedBy) updateFields["profile.modifiedBy"] = data.modifiedBy;
+      if (data.orgRole) updateFields.orgRole = data.orgRole;
 
       const member = await Member.findOneAndUpdate(
         {
