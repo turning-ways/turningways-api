@@ -33,7 +33,7 @@ router.post(
 );
 
 router.get(
-  "/me",
+  "/:churchId/me",
   validateToken.validateToken,
   authorize([permissions.member.view], "all"),
   memberController.getMe,
