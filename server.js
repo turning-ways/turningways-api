@@ -50,7 +50,7 @@ async function startServer() {
     }),
   );
   app.use(bodyFilter);
-  await initializeRedisClient();
+  // await initializeRedisClient();
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes

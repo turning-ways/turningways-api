@@ -5,11 +5,12 @@ const MemberService = require("./member.service");
 const AppError = require("../utils/appError");
 
 class TokenService {
-  static async generateAccessToken(user) {
-    const MemberRole = await MemberService.getMemberRole(user._id);
+  static async generateAccessToken(user, churchId) {
+    const MemberRole = await MemberService.getMemberRole(user._id, churchId);
     let memberRoleName = null;
-    if (MemberRole && MemberRole.orgRole) {
-      memberRoleName = MemberRole.orgRole.name;
+    if (MemberRole) {
+      memberRoleName = MemberRole.name;
+      // permissions = MemberRole.permissions;
     }
     const payload = {
       id: user._id,

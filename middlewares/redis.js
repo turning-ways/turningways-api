@@ -39,7 +39,7 @@ function requestToKey(req) {
 }
 
 function isRedisWorking() {
-  return redisClient?.isOpen || false;
+  return redisClient.isOpen || false;
 }
 
 async function writeData(key, data, options = {}) {

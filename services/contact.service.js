@@ -136,6 +136,7 @@ class ContactService {
       if (data.maturityLevel) updateFields.maturityLevel = data.maturityLevel;
       if (data.contactType) updateFields.contactType = data.contactType;
       updateFields.notes = [
+        ...contact.notes,
         {
           comment: "Contact updated",
           type: "contact",

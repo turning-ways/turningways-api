@@ -20,6 +20,7 @@ exports.createContact = [
           contactStatus: contact.contactStatus || null,
           memberStatus: contact.memberStatus || null,
           maturityLevel: contact.maturityLevel || null,
+          contactType: contact.contactType || null,
           educatonalLevel: contact.profile.educationalLevel || null,
           employmentStatus: contact.profile.employmentStatus || null,
           healthStatus: contact.profile.healthStatus || null,
@@ -50,6 +51,7 @@ exports.getContacts = catchAsync(async (req, res, next) => {
         contactStatus: contact.contactStatus || null,
         memberStatus: contact.memberStatus || null,
         maturityLevel: contact.maturityLevel || null,
+        contactType: contact.contactType || null,
         educatonalLevel: contact.profile.educationalLevel || null,
         employmentStatus: contact.profile.employmentStatus || null,
         healthStatus: contact.profile.healthStatus || null,
@@ -312,11 +314,7 @@ exports.updateAction = catchAsync(async (req, res, next) => {
 
 exports.deleteAction = catchAsync(async (req, res, next) => {
   const { contactId, actionId, churchId } = req.params;
-  const contact = await ContactService.deleteActionItem(
-    contactId,
-    actionId,
-    churchId,
-  );
+  await ContactService.deleteActionItem(contactId, actionId, churchId);
   res.status(204).json({
     status: "success",
     message: "Action deleted successfully",

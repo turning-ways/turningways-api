@@ -8,70 +8,10 @@ const Role = require("../model/roleModel");
 const { logger } = require("../utils/logger");
 const AppError = require("../utils/appError");
 const MemberService = require("./member.service");
-
-const permissions = {
-  church: ["CREATE_CHURCH", "UPDATE_CHURCH", "DELETE_CHURCH"],
-  request: ["SEND_REQUEST"],
-  churchRequest: ["ACCEPT_REQUEST", "REJECT_REQUEST", "DELETE_REQUEST"],
-  level: ["CREATE_LEVEL", "UPDATE_LEVEL", "DELETE_LEVEL"],
-  churchLevel: ["ADD_LEVEL", "REMOVE_LEVEL"],
-  role: ["CREATE_ROLE", "UPDATE_ROLE", "DELETE_ROLE"],
-  member: ["CREATE_MEMBER", "UPDATE_MEMBER", "DELETE_MEMBER"],
-  event: ["CREATE_EVENT", "UPDATE_EVENT", "DELETE_EVENT"],
-  group: ["CREATE_GROUP", "UPDATE_GROUP", "DELETE_GROUP"],
-  groupMember: ["ADD_MEMBER", "REMOVE_MEMBER"],
-  groupEvent: ["ADD_EVENT", "REMOVE_EVENT"],
-  me: ["UPDATE_ME", "DELETE_ME"],
-};
+const { defaultRoles } = require("../utils/permissions");
 
 const createDefaultRoles = async (churchId, isHQ, session) => {
-  const roles = [
-    {
-      name: "Admin",
-      church: churchId,
-      description: "Admin role",
-      permissions: [
-        ...permissions.church,
-        ...permissions.level,
-        ...permissions.request,
-        ...permissions.churchLevel,
-        ...permissions.role,
-        ...permissions.member,
-        ...permissions.event,
-        ...permissions.group,
-        ...permissions.groupMember,
-        ...permissions.groupEvent,
-      ],
-    },
-    {
-      name: "Member",
-      church: churchId,
-      description: "Member role",
-      permissions: [...permissions.me],
-    },
-  ];
-
-  if (isHQ) {
-    roles.unshift({
-      name: "Super-Admin",
-      church: churchId,
-      description: "Super admin role",
-      permissions: [
-        ...permissions.church,
-        ...permissions.churchRequest,
-        ...permissions.request,
-        ...permissions.level,
-        ...permissions.churchLevel,
-        ...permissions.role,
-        ...permissions.member,
-        ...permissions.event,
-        ...permissions.group,
-        ...permissions.groupMember,
-        ...permissions.groupEvent,
-        ...permissions.me,
-      ],
-    });
-  }
+  const roles = defaultRoles(isHQ, churchId);
 
   const createdRoles = await Role.create(roles, { session });
   return createdRoles;
@@ -246,7 +186,6 @@ const createChurchOnBoardingService = async (memberData, churchData, req) => {
         400,
       );
     }
-
     logger.error(`Error creating church: ${error}`);
     throw error;
   }
@@ -254,7 +193,7 @@ const createChurchOnBoardingService = async (memberData, churchData, req) => {
 
 class ChurchService {
   static async createChurchOnBoarding(memberData, churchData, req) {
-    return createChurchOnBoardingService(memberData, churchData, req);
+    return await createChurchOnBoardingService(memberData, churchData, req);
   }
 
   static async findChurchById(id) {
@@ -575,6 +514,17 @@ class ChurchService {
       await session.abortTransaction();
       session.endSession();
       logger.error(`Error uploading church logo: ${error.message}`);
+      throw error;
+    }
+  }
+
+  static async getRoles(churchId) {
+    try {
+      const roles = await Role.find({ church: churchId });
+      logger.info(`Roles found for church with ID: ${churchId}`);
+      return roles;
+    } catch (error) {
+      logger.error(`Error getting roles: ${error.message}`);
       throw error;
     }
   }

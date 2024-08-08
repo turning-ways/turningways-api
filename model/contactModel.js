@@ -21,12 +21,15 @@ const contactSchema = new mongoose.Schema(
     orgRole: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Role",
+      required: true,
+      index: true, // Index on orgRole
     },
     profile: {
       firstName: {
         type: String,
         trim: true,
         required: [true, "First name is required"],
+        index: true, // Index on firstName
       },
       middleName: {
         type: String,
@@ -35,6 +38,7 @@ const contactSchema = new mongoose.Schema(
       lastName: {
         type: String,
         trim: true,
+        index: true, // Index on lastName
       },
       photo: {
         type: String,
@@ -82,6 +86,7 @@ const contactSchema = new mongoose.Schema(
             message:
               "Phone number already exists for another contact in the church",
           },
+          index: true, // Index on mainPhone
         },
         workPhone: {
           type: String,
@@ -191,6 +196,7 @@ const contactSchema = new mongoose.Schema(
       type: String,
       enum: ["unverified", "incomplete", "verified"],
       default: "unverified",
+      index: true, // Index on verification
     },
     contactStatus: {
       type: String,
@@ -276,6 +282,34 @@ const contactSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+// Contact Schema Indexes
+// general indexes
+contactSchema.index({ churchId: 1 });
+contactSchema.index({ orgRole: 1 });
+contactSchema.index({ "profile.firstName": 1 });
+contactSchema.index({ "profile.lastName": 1 });
+contactSchema.index({ "profile.phone.mainPhone": 1 });
+contactSchema.index({ "profile.email": 1 });
+contactSchema.index({ contactType: 1 });
+contactSchema.index({ verification: 1 });
+contactSchema.index({ isDeleted: 1 });
+// compound indexes
+
+// - A compound text search index on the firstName, lastName, and email fields
+contactSchema.index({
+  "profile.firstName": "text",
+  "profile.lastName": "text",
+  "profile.email": "text",
+});
+// - A compound index on the churchId and contactType fields
+contactSchema.index({ churchId: 1, contactType: 1 });
+// - A compound index on the id and churchId fields
+contactSchema.index({ _id: 1, churchId: 1 });
+// - A compound index on the churchId and isDeleted fields
+contactSchema.index({ churchId: 1, isDeleted: 1 });
+// - A compound index on the churchId and createdAt fields
+contactSchema.index({ churchId: 1, createdAt: 1 });
 
 // Check if the userId exists
 contactSchema.pre("save", function (next) {

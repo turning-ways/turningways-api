@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 
 function connectDB() {
   return new Promise((resolve, reject) => {
-    mongoose.connect(process.env.DATABASE);
+    if (process.env.NODE_ENV === "test") {
+      mongoose.connect(process.env.TEST_DATABASE);
+    } else {
+      mongoose.connect(process.env.DATABASE);
+    }
     const db = mongoose.connection;
 
     // Connection events

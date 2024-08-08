@@ -11,15 +11,18 @@ const churchSchema = new mongoose.Schema(
     isHQ: {
       type: Boolean,
       default: false,
+      index: true,
     },
     level: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Level",
       required: [true, "Church level is required"],
+      index: true,
     },
     parentChurch: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Church",
+      index: true,
     },
     location: {
       address: {
@@ -101,10 +104,15 @@ const churchSchema = new mongoose.Schema(
 );
 
 // Add indexes
+churchSchema.index({ level: 1 }); // Index on level field
+churchSchema.index({ parentChurch: 1 }); // Index on parentChurch field
 churchSchema.index({ createdAt: 1 }); // Index on createdAt field
 churchSchema.index({ updatedAt: 1 }); // Index on updatedAt field
 churchSchema.index({ isDeleted: 1 }); // Index on isDeleted field
 churchSchema.index({ createdAt: 1, isDeleted: 1 }); // Compound index for querying ranges and deletion status
+
+// Make search index for the name field
+churchSchema.index({ name: "text" });
 
 churchSchema.pre(/^find/, function (next) {
   this.find({ isDeleted: { $ne: true } });

@@ -19,8 +19,8 @@ exports.createChurchOnboarding = [
       status: "success",
       message: "Church created successfully",
       data: {
-        churchId: church._id,
-        churchName: church.name,
+        churchId: church.church._id,
+        churchName: church.church.name,
         // churchLogo: church.settings.logo,
       },
     });
@@ -262,5 +262,4 @@ exports.getMembersStats = catchAsync(async (req, res, next) => {
       MembersJoined: memberStats2,
     },
   });
-
 });

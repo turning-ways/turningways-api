@@ -18,79 +18,88 @@ class MemberService {
     createdRoles,
     session,
   ) {
-    // Validate input data
-    if (
-      !data.gender ||
-      !data.dateOfBirth ||
-      !data.phone ||
-      !data.howDidYouHear
-    ) {
-      throw new AppError("Missing required fields", 400);
-    }
-
-    console.log(churchId);
-    // Check if the userId exists
-    const userExists = await User.findById(userId);
-    if (!userExists) {
-      throw new AppError("User Id does not exist", 404);
-    }
-    if (userExists.mainChurch) {
-      if (userExists.mainChurch.toString() !== churchId) {
-        throw new AppError("There was an Error creating this Member", 400);
+    try {
+      // Validate input data
+      if (
+        !data.gender ||
+        !data.dateOfBirth ||
+        !data.phone ||
+        !data.howDidYouHear
+      ) {
+        throw new AppError("Missing required fields", 400);
       }
-    }
 
-    // Check if the user has a role == admin
-    if (userExists.role !== "admin") {
-      throw new AppError(
-        "You do not have the permission to create a member",
-        403,
+      console.log(churchId);
+
+      // Check if the userId exists
+      const userExists = await User.findById(userId);
+      if (!userExists) {
+        throw new AppError("User Id does not exist", 404);
+      }
+      if (userExists.mainChurch) {
+        if (userExists.mainChurch.toString() !== churchId) {
+          throw new AppError("There was an error creating this member", 400);
+        }
+      }
+
+      // Check if the user has a role == admin
+      if (userExists.role !== "admin") {
+        throw new AppError(
+          "You do not have the permission to create a member",
+          403,
+        );
+      }
+
+      // Check the role super-admin exists for that churchId and use the session
+      const roleExists = createdRoles.find(
+        (role) => role.name === "Super Admin",
       );
-    }
+      if (!roleExists) {
+        throw new AppError("Role does not exist", 404);
+      }
 
-    // Check the role super-admin exists for that churchId and use the session
-    const roleExists = createdRoles.find((role) => role.name === "Super-Admin");
-    if (!roleExists) {
-      throw new AppError("Role does not exist", 404);
-    }
+      // Check for duplicate member
+      const duplicateMember = await Member.findOne({
+        "profile.email": userDetails.email,
+        churchId: churchId,
+        contactType: "member",
+      });
+      if (duplicateMember) {
+        throw new AppError("Member with this email already exists", 409);
+      }
 
-    // Check for duplicate member
-    const duplicateMember = await Member.findOne({
-      "profile.email": userDetails.email,
-      churchId: churchId,
-      contactType: "member",
-    });
-    if (duplicateMember) {
-      throw new AppError("Member with this email already exists", 409);
-    }
-
-    const member = new Member({
-      userId,
-      orgRole: roleExists._id,
-      churchId: churchId,
-      profile: {
-        firstName: userExists.firstName,
-        middleName: data.middleName,
-        lastName: userDetails.lastName,
-        gender: data.gender,
-        dateOfBirth: data.dateOfBirth,
-        phone: {
-          mainPhone: data.phone,
+      const member = new Member({
+        userId,
+        orgRole: roleExists._id,
+        churchId: churchId,
+        profile: {
+          firstName: userExists.firstName,
+          middleName: data.middleName,
+          lastName: userDetails.lastName,
+          gender: data.gender,
+          dateOfBirth: data.dateOfBirth,
+          phone: {
+            mainPhone: data.phone,
+          },
+          photo: userExists.photo,
+          email: data.email,
         },
-        photo: userExists.photo,
-        email: data.email,
-      },
-      howDidYouHear: data.howDidYouHear,
-      verification: "verified",
-      contactType: "member",
-    });
-    const newMember = await member.save({ session });
-    if (!newMember) {
-      throw new AppError("Member not created", 400);
-    }
+        howDidYouHear: data.howDidYouHear,
+        verification: "verified",
+        contactType: "member",
+      });
 
-    logger.info(`Member created with ID: ${newMember._id}`);
-    return newMember;
+      const newMember = await member.save({ session });
+      if (!newMember) {
+        throw new AppError("Member not created", 400);
+      }
+
+      logger.info(`Member created with ID: ${newMember._id}`);
+      return newMember;
+    } catch (error) {
+      logger.error(`Error creating member: ${error.message}`);
+      throw error;
+    }
   }
 
   static async createMember(data) {
@@ -190,12 +199,15 @@ class MemberService {
     }
   }
 
-  static async getMemberRole(userId) {
+  static async getMemberRole(userId, churchId) {
     try {
       const member = await Member.findOne({
         userId,
-        contactType: "member",
-      }).populate("orgRole", "name");
+        churchId,
+      }).populate({
+        path: "orgRole",
+        select: "name permissions",
+      });
       if (!member) {
         return null;
       }

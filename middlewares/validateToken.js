@@ -25,9 +25,10 @@ exports.validateToken = async (req, res, next) => {
 
     // Optional: Check if user is still in the database
 
-    const Member = await MemberService.getMemberRole(decoded.id);
-    if (Member) {
-      req.role = Member.name;
+    const MemberRole = await MemberService.getMemberRole(decoded.id);
+    if (MemberRole) {
+      req.role = MemberRole.name;
+      req.roleId = MemberRole._id;
     }
     // 5. Proceed to next middleware:
     next();

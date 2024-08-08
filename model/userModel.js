@@ -94,9 +94,10 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "member"],
+    enum: ["admin", "member", "sub-admin"],
     default: "member",
     required: true,
+    index: true,
   },
   mainChurch: {
     type: mongoose.Schema.Types.ObjectId,
@@ -108,11 +109,13 @@ const userSchema = new mongoose.Schema({
       },
       message: "Only Admins can have a main church",
     },
+    index: true,
   },
   churches: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Church",
+      index: true,
     },
   ],
   updatedAt: {
@@ -121,6 +124,19 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+// Indexes
+userSchema.index({ email: 1 });
+userSchema.index({ phone: 1 });
+userSchema.index({ emailConfirmationToken: 1 });
+userSchema.index({ "externalProvider.email": 1 });
+userSchema.index({ "externalProvider.id": 1 });
+userSchema.index({ churches: 1 });
+userSchema.index({ mainChurch: 1 });
+// compound index
+userSchema.index({ email: 1, phone: 1 });
+userSchema.index({ email: 1, phone: 1, "externalProvider.email": 1 });
+userSchema.index({ email: 1, "externalProvider.email": 1 });
 
 // Document middleware
 // Hash the password before saving the user

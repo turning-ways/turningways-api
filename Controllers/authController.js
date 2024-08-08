@@ -55,7 +55,10 @@ exports.Login = [
     }
 
     // Generate The Token
-    const accessToken = await TokenService.generateAccessToken(user);
+    const accessToken = await TokenService.generateAccessToken(
+      user,
+      user.mainChurch,
+    );
     const refreshToken = await TokenService.generateRefreshToken(user);
     authSuccess.handleLogin(accessToken, refreshToken, user, res);
   }),
@@ -85,7 +88,10 @@ exports.RefreshToken = [
         message: "Access denied: Invalid token.",
       });
     }
-    const accessToken = await TokenService.generateAccessToken(userExists);
+    const accessToken = await TokenService.generateAccessToken(
+      userExists,
+      userExists.mainChurch,
+    );
     const newRefreshToken = await TokenService.generateRefreshToken(userExists);
     res
       .status(200)
