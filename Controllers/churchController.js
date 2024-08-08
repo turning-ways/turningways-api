@@ -263,3 +263,14 @@ exports.getMembersStats = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.getRoles = catchAsync(async (req, res, next) => {
+  const roles = await churchService.getRoles(req.params.churchId);
+  res.status(200).json({
+    status: "success",
+    message: "Roles retrieved successfully",
+    data: {
+      roles,
+    },
+  });
+});

@@ -72,4 +72,12 @@ router.get(
   churchController.getMembersStats,
 );
 
+router.get(
+  "/:churchId/roles",
+  validateToken,
+  rightsCheck,
+  authorize([permissions.role.update], "all"),
+  churchController.getRoles,
+);
+
 module.exports = router;
