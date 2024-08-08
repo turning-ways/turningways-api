@@ -363,10 +363,10 @@ class MemberService {
         throw new AppError("Member not updated", 400);
       }
 
-      // form the requestKey for the cache
-      const requestUrl = `/api/v1/churches/${member.churchId}/members`;
-      const requestKey = hash(requestUrl);
-      await clearCache(requestKey);
+      // // form the requestKey for the cache
+      // const requestUrl = `/api/v1/churches/${member.churchId}/members`;
+      // const requestKey = hash(requestUrl);
+      // await clearCache(requestKey);
 
       await session.commitTransaction();
       logger.info(`Member updated with ID: ${id}`);
@@ -396,10 +396,10 @@ class MemberService {
         throw new AppError("Member not deleted", 400);
       }
 
-      // form the requestKey for the cache
-      const requestUrl = `/api/v1/churches/${member.churchId}/members`;
-      const requestKey = hash(requestUrl);
-      await clearCache(requestKey);
+      // // form the requestKey for the cache
+      // const requestUrl = `/api/v1/churches/${member.churchId}/members`;
+      // const requestKey = hash(requestUrl);
+      // await clearCache(requestKey);
 
       logger.info(`Member soft deleted with ID: ${id}`);
       return member;
