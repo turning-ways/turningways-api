@@ -5,7 +5,7 @@ const Role = require("../model/roleModel");
 const Member = require("../model/contactModel");
 const AppError = require("../utils/appError");
 const { logger } = require("../utils/logger");
-const helper = require("../utils/helpers");
+// const helper = require("../utils/helpers");
 
 const { clearCache } = require("../middlewares/redis");
 
@@ -132,7 +132,8 @@ class MemberService {
 
       // get the member role
       const role = await Role.findOne({
-        name: helper.capitalize(data.role),
+        _id: data.orgRole,
+        churchId: data.churchId,
       });
       if (!role) {
         throw new AppError("Role does not exist", 404);
