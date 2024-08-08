@@ -184,9 +184,9 @@ class MemberService {
       }
 
       // form the requestKey for the cache
-      const requestUrl = `/api/v1/churches/${data.churchId}/members`;
-      const requestKey = hash(requestUrl);
-      await clearCache(requestKey);
+      // const requestUrl = `/api/v1/churches/${data.churchId}/members`;
+      // const requestKey = hash(requestUrl);
+      // await clearCache(requestKey);
 
       await session.commitTransaction();
       logger.info(`Member created with ID: ${member[0]._id}`);
