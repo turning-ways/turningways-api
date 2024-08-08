@@ -133,7 +133,7 @@ class MemberService {
       // get the member role
       const role = await Role.findOne({
         _id: data.orgRole,
-        churchId: data.churchId,
+        church: data.churchId,
       });
       if (!role) {
         throw new AppError("Role does not exist", 404);
