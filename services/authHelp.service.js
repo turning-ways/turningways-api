@@ -259,12 +259,9 @@ class AuthService {
       }
 
       if (member && member.orgRole.name === "Member") {
-        res
-          .status(200)
-          .cookie("refreshToken", refreshToken, CookieOptions)
-          .redirect(
-            `http://localhost:5173/auth/google/verify?id=${user._id.toString()}&token=${accessToken}&churchId=${member.churchId}&redirectUrl=http://localhost:5173/member/dashboard/today`,
-          );
+        res.redirect(
+          `http://localhost:5173/auth/google/verify?id=${user._id.toString()}&token=${accessToken}&churchId=${member.churchId}&redirectUrl=http://localhost:5173/member/dashboard/today`,
+        );
         return;
       }
 
