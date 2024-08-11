@@ -218,15 +218,11 @@ exports.validateExternalProvider = catchAsync(async (req, res, next) => {
 
   const refreshToken = await TokenService.generateRefreshTokenWithId(userId);
 
-  res
-    .status(200)
-    .cookie("refreshToken", refreshToken, CookieOptions);
-    .json({
-      status: "success",
-      message: "Token Valid",
-      data: info,
-    })
-    
+  res.status(200).cookie("refreshToken", refreshToken, CookieOptions).json({
+    status: "success",
+    message: "Token Valid",
+    data: info,
+  });
 });
 
 exports.Logout = async (req, res) => {
