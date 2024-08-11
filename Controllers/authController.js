@@ -220,12 +220,13 @@ exports.validateExternalProvider = catchAsync(async (req, res, next) => {
 
   res
     .status(200)
+    .cookie("refreshToken", refreshToken, CookieOptions);
     .json({
       status: "success",
       message: "Token Valid",
       data: info,
     })
-    .cookie("refreshToken", refreshToken, CookieOptions);
+    
 });
 
 exports.Logout = async (req, res) => {
