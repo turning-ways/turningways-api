@@ -23,8 +23,8 @@ class TokenService {
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN,
     });
-    user.token = token;
-    await user.save({ validateBeforeSave: false });
+    // user.token = token;
+    // await user.save({ validateBeforeSave: false });
 
     return token;
   }
@@ -38,16 +38,25 @@ class TokenService {
     });
   }
 
+  static async generateRefreshTokenWithId(id) {
+    const payload = {
+      id,
+    };
+    return jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
+      expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
+    });
+  }
+
   static async verifyAccessToken(token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const userTokenExists = await User.find({
-        _id: decoded.id,
-        token: token,
-      });
-      if (!userTokenExists) {
-        throw new Error("Invalid or expired access token");
-      }
+      // const userTokenExists = await User.find({
+      //   _id: decoded.id,
+      //   token: token,
+      // });
+      // if (!userTokenExists) {
+      //   throw new Error("Invalid or expired access token");
+      // }
 
       return decoded;
     } catch (error) {

@@ -200,6 +200,34 @@ exports.acceptInvitation = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.validateExternalProvider = catchAsync(async (req, res, next) => {
+  // get the token and memberid
+  const { token, churchId, userId, redirectUrl } = req.query;
+  // check if the token is valid
+  const info = await AuthService.validateExternalProvider(
+    token,
+    churchId,
+    redirectUrl,
+  );
+  if (info === null) {
+    res.status(400).json({
+      status: "error",
+      message: "Invalid Token",
+    });
+  }
+
+  const refreshToken = await TokenService.generateRefreshTokenWithId(userId);
+
+  res
+    .status(200)
+    .json({
+      status: "success",
+      message: "Token Valid",
+      data: info,
+    })
+    .cookie("refreshToken", refreshToken, CookieOptions);
+});
+
 exports.Logout = async (req, res) => {
   console.log(req.user);
   const user = await UserService.findUserById(req.user.id);

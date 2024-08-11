@@ -36,6 +36,8 @@ router.post("/auth/forgot-password", ac.sendResetPassword);
 router.patch("/auth/verify-password-token", ac.verifyPasswordResetToken);
 router.patch("/auth/reset-password/:userId", ac.resetPassword);
 
+router.get("/auth/google/verify", ac.validateExternalProvider);
+
 // -----------Protected Route-----------
 router.get("/profile", validateToken, (req, res) => {
   if (req.isAuthenticated()) {

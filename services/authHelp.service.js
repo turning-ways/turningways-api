@@ -20,7 +20,7 @@ const { logger } = require("../utils/logger");
 
 const CookieOptions = {
   httpOnly: true,
-  sameSite: "None",
+  sameSite: "strict",
   secure: true,
 };
 
@@ -238,22 +238,34 @@ class AuthService {
 
   static async handleGoogleAdminCallback(user, res) {
     try {
+      // console.log("User", user);
       // Check if user is a member
       const member = await Contact.findOne({
         userId: user._id,
         contactType: "member",
       }).populate("orgRole", "name");
 
+      console.log("Member", member);
+
       const accessToken = await TokenService.generateAccessToken(user);
       const refreshToken = await TokenService.generateRefreshToken(user);
 
       // If the user is an admin, redirect to the admin dashboard
-      if (member && member.orgRole.name === "Super-Admin") {
-        return res
+      if (member && member.orgRole.name !== "Member") {
+        res.redirect(
+          `http://localhost:5173/auth/google/verify?id=${user._id.toString()}&token=${accessToken}&churchId=${member.churchId}&redirectUrl=http://localhost:5173/admin/dashboard/today`,
+        );
+        return;
+      }
+
+      if (member && member.orgRole.name === "Member") {
+        res
           .status(200)
-          .cookie("accessToken", accessToken, CookieOptions)
           .cookie("refreshToken", refreshToken, CookieOptions)
-          .redirect("https://www.turningways.com/admin/dashboard/today");
+          .redirect(
+            `http://localhost:5173/auth/google/verify?id=${user._id.toString()}&token=${accessToken}&churchId=${member.churchId}&redirectUrl=http://localhost:5173/member/dashboard/today`,
+          );
+        return;
       }
 
       // If the user is not an admin, redirect to the home
@@ -265,12 +277,13 @@ class AuthService {
       if (user.role === "admin" && !user.mainChurch) {
         return res
           .status(200)
-          .cookie("access_token", accessToken, CookieOptions)
           .cookie("refreshToken", refreshToken, CookieOptions)
           .redirect(
             `https://www.turningways.com/register/personalinfo?t=${refreshToken}`,
           );
       }
+
+      // res.status(200).redirect("https://www.turningways.com");
     } catch (error) {
       console.error("Error in handleGoogleAdminCallback:", error);
 
@@ -280,6 +293,20 @@ class AuthService {
         message: "An error occurred while processing your request",
       });
     }
+  }
+
+  static async validateExternalProvider(token, churchId, redirectUrl) {
+    // Check if the token is valid
+    const isValid = await TokenService.verifyAccessToken(token);
+    // If the token is not valid, redirect to the login page
+    if (!isValid) {
+      return null;
+    }
+
+    return {
+      churchId,
+      redirectUrl,
+    };
   }
 }
 
