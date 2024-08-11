@@ -253,14 +253,14 @@ class AuthService {
       // If the user is an admin, redirect to the admin dashboard
       if (member && member.orgRole.name !== "Member") {
         res.redirect(
-          `http://localhost:5173/auth/google/verify?id=${user._id.toString()}&token=${accessToken}&churchId=${member.churchId}&redirectUrl=http://localhost:5173/admin/dashboard/today`,
+          `https://www.turningways.com/auth/google/verify?id=${user._id.toString()}&token=${accessToken}&churchId=${member.churchId}&redirectUrl=https://www.turningways.com/admin/dashboard/today`,
         );
         return;
       }
 
       if (member && member.orgRole.name === "Member") {
         res.redirect(
-          `http://localhost:5173/auth/google/verify?id=${user._id.toString()}&token=${accessToken}&churchId=${member.churchId}&redirectUrl=http://localhost:5173/member/dashboard/today`,
+          `https://www.turningways.com/auth/google/verify?id=${user._id.toString()}&token=${accessToken}&churchId=${member.churchId}&redirectUrl=https://www.turningways.com/member/dashboard/today`,
         );
         return;
       }
