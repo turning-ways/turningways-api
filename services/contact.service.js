@@ -75,9 +75,6 @@ class ContactService {
       if (error.code === 11000) {
         throw new AppError("Contact already exists", 400);
       }
-      if (error.name === "ValidationError") {
-        throw new AppError("phone number already exists", 400);
-      }
       throw new AppError(error, 500);
     } finally {
       session.endSession();
