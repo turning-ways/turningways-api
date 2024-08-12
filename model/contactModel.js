@@ -21,7 +21,6 @@ const contactSchema = new mongoose.Schema(
     orgRole: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Role",
-      required: true,
       index: true, // Index on orgRole
     },
     profile: {
