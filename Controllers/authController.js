@@ -68,7 +68,7 @@ exports.RefreshToken = [
   catchAsync(async (req, res, next) => {
     const { refreshToken } = req.cookies;
     const { rc } = req.body;
-    if (!refreshToken) {
+    if (!refreshToken && !rc) {
       return res.status(401).json({
         status: "error",
         message: "Access denied: No token provided.",
