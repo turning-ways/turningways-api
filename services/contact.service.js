@@ -143,10 +143,12 @@ class ContactService {
         _id: { $ne: contactId },
       });
       if (contactExists) {
-        throw new AppError(
-          "Contact with email or phone number already exists",
-          400,
-        );
+        if (contactExists.profile.email === data.email) {
+          throw new AppError("Contact with email already exists", 400);
+        }
+        if (contactExists.profile.phone.mainPhone === data.phone) {
+          throw new AppError("Contact with phone number already exists", 400);
+        }
       }
 
       let updatedContact = await Contact.findOneAndUpdate(
