@@ -474,7 +474,7 @@ class ChurchService {
       photo: member.profile.photo,
       firstName: member.profile.firstName,
       lastName: member.profile.lastName,
-      role: member.orgRole.name ? member.orgRole.name : "Member",
+      role: member.orgRole ? member.orgRole.name : "No Role",
       fullName: `${member.profile.firstName} ${member.profile.lastName}`,
       email: member.profile.email,
       gender: member.profile.gender,
