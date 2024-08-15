@@ -132,16 +132,6 @@ class ContactService {
       if (data.phone) updateFields["profile.phone.mainPhone"] = data.phone;
       if (data.maturityLevel) updateFields.maturityLevel = data.maturityLevel;
       if (data.contactType) updateFields.contactType = data.contactType;
-      updateFields.notes = [
-        ...contact.notes,
-        {
-          comment: "Contact updated",
-          type: "contact",
-          // generate a new timestamp
-          date: moment().format(),
-          member: data.modifiedBy,
-        },
-      ];
 
       // check if email or phone number already exists
       const contactExists = await Contact.findOne({
@@ -164,6 +154,16 @@ class ContactService {
         updateFields,
         { new: true, session },
       );
+      // Append the note to the contact
+      if (data.note) {
+        updatedContact.notes.push({
+          comment: "Contact updated",
+          type: "contact",
+          // generate a new timestamp
+          date: moment().format(),
+          member: data.modifiedBy,
+        });
+      }
 
       updatedContact = await updatedContact.populate(
         "notes.member",
@@ -174,6 +174,8 @@ class ContactService {
         "assignedTo",
         "profile.firstName profile.lastName",
       );
+
+      await updatedContact.save({ session });
 
       await session.commitTransaction();
       return updatedContact;
