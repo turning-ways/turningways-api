@@ -59,6 +59,7 @@ class ContactService {
               {
                 comment: "Contact created",
                 type: "contact",
+                // generate a new timestamp in UTC
                 date: moment().format(),
                 member: data.createdBy,
               },
@@ -143,7 +144,12 @@ class ContactService {
         _id: { $ne: contactId },
       });
       if (contactExists) {
-        if (contactExists.profile.email === data.email) {
+        if (
+          contactExists.profile.email === data.email &&
+          contactExists.profile.email !== undefined &&
+          contactExists.profile.email !== null &&
+          contactExists.profile.email !== ""
+        ) {
           throw new AppError("Contact with email already exists", 400);
         }
         if (contactExists.profile.phone.mainPhone === data.phone) {
