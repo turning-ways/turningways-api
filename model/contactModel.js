@@ -188,7 +188,7 @@ const contactSchema = new mongoose.Schema(
         "inprogress",
         "undefined",
       ],
-      default: "member",
+      default: "inprogress",
       index: true, // Index on contactType
     },
     verification: {

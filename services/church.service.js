@@ -382,10 +382,6 @@ class ChurchService {
           member.contactType === "member" && member.profile.active === true,
       ).length;
 
-      const noOfMembers = membersJoined.filter(
-        (member) => member.contactType === "member",
-      ).length;
-
       let maleCount = 0;
       let femaleCount = 0;
       members.forEach((member) => {
@@ -447,7 +443,7 @@ class ChurchService {
         unverifiedCount: unverifiedMembers,
         activeMembers: ActiveMembers,
         noOfContacts: membersJoined.length,
-        noOfMembers,
+        noOfMembers: members.length,
         ageGroup,
         members,
       };
