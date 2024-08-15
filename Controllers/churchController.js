@@ -249,7 +249,6 @@ exports.uploadChurchLogo = catchAsync(async (req, res, next) => {
 });
 
 exports.getMembersStats = catchAsync(async (req, res, next) => {
-  const membersStats = await churchService.getMemberCount(req.params.churchId);
   const memberStats2 = await churchService.getMembersJoinedStats(
     req.params.churchId,
     req.query.dateParam,
@@ -258,7 +257,6 @@ exports.getMembersStats = catchAsync(async (req, res, next) => {
     status: "success",
     message: "Members stats retrieved successfully",
     data: {
-      TotalMembers: membersStats,
       MembersJoined: memberStats2,
     },
   });

@@ -69,6 +69,24 @@ const churchSchema = new mongoose.Schema(
         type: String,
         validate: [validator.isURL, "Please provide a valid URL"],
       },
+      theme: {
+        type: String,
+        default: "default",
+      },
+      notifications: {
+        email: {
+          type: Boolean,
+          default: true,
+        },
+        sms: {
+          type: Boolean,
+          default: true,
+        },
+        push: {
+          type: Boolean,
+          default: true,
+        },
+      },
       logo: {
         type: String,
       },

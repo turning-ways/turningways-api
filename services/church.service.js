@@ -296,17 +296,6 @@ class ChurchService {
     }
   }
 
-  static async getMemberCount(churchId) {
-    try {
-      const members = await Contact.find({ churchId, contactType: "member" });
-      logger.info(`Members count for church with ID: ${churchId}`);
-      return members.length;
-    } catch (error) {
-      logger.error(`Error getting member count: ${error.message}`);
-      throw error;
-    }
-  }
-
   static async getMembersJoinedStats(churchId, dateParam) {
     try {
       const church = await Church.findById(churchId);
@@ -393,6 +382,10 @@ class ChurchService {
           member.contactType === "member" && member.profile.active === true,
       ).length;
 
+      const noOfMembers = membersJoined.filter(
+        (member) => member.contactType === "member",
+      ).length;
+
       let maleCount = 0;
       let femaleCount = 0;
       members.forEach((member) => {
@@ -454,6 +447,7 @@ class ChurchService {
         unverifiedCount: unverifiedMembers,
         activeMembers: ActiveMembers,
         noOfContacts: membersJoined.length,
+        noOfMembers,
         ageGroup,
         members,
       };
@@ -484,7 +478,7 @@ class ChurchService {
       photo: member.profile.photo,
       firstName: member.profile.firstName,
       lastName: member.profile.lastName,
-      role: member.orgRole.name,
+      role: member.orgRole.name ? member.orgRole.name : "Member",
       fullName: `${member.profile.firstName} ${member.profile.lastName}`,
       email: member.profile.email,
       gender: member.profile.gender,
